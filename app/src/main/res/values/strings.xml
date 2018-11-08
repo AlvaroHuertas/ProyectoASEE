@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">ProyectoASEE_NoGymMembership</string>
+    <string name="action_settings">Settings</string>
+    <string name="welcome_message">Try to start training in the street avoiding to pay for a gym membership!</string>
+    <string name="set_data">Please set your athlete profile:</string>
+    <string name="set_weight">Weight:</string>
+    <string name="set_height">Height:</string>
+    <string name="set_gender">Gender:</string>
+    <string name="set_level">Level:</string>
+    <string name="genderMale">Male</string>
+    <string name="genderFemale">Female</string>
+    <string name="levelBeginner">Beginner</string>
+    <string name="levelMedium">Medium</string>
+    <string name="levelProfesional">Profesional</string>
+    <string name="startRoutines">Enter</string>
+    <string name="title_activity_routines_acivity">RoutinesAcivity</string>
+</resources>
