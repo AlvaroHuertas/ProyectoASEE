@@ -60,7 +60,7 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:inputType="numberDecimal"
-            android:text="in CM"
+            android:hint="in CM"
             android:textColor="@android:color/darker_gray" />
 
     </LinearLayout>

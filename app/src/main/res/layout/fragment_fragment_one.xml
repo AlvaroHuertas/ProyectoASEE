@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".FragmentOne">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ListView
+        android:id="@+id/listCategories"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/One_hello_blank_fragment"
-        android:gravity="center" 
-        android:textSize="24sp"/>
+        android:layout_height="wrap_content">
+    </ListView>
+
 
 </FrameLayout>
