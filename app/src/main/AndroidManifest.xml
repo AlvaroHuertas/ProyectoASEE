@@ -22,6 +22,10 @@
         <activity
             android:name=".RoutinesActivity"
             android:label="@string/title_activity_routines_acivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".NavDrawer"
+            android:label="@string/title_activity_nav_drawer"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

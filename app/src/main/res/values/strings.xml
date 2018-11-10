@@ -1,17 +1,30 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">ProyectoASEE_NoGymMembership</string>
-    <string name="action_settings">Settings</string>
-    <string name="welcome_message">Try to start training in the street avoiding to pay for a gym membership!</string>
-    <string name="set_data">Please set your athlete profile:</string>
-    <string name="set_weight">Weight:</string>
-    <string name="set_height">Height:</string>
-    <string name="set_gender">Gender:</string>
-    <string name="set_level">Level:</string>
-    <string name="genderMale">Male</string>
-    <string name="genderFemale">Female</string>
-    <string name="levelBeginner">Beginner</string>
-    <string name="levelMedium">Medium</string>
-    <string name="levelProfesional">Profesional</string>
-    <string name="startRoutines">Enter</string>
-    <string name="title_activity_routines_acivity">RoutinesAcivity</string>
+    <string name="app_name" translatable="false">ProyectoASEE_NoGymMembership</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="welcome_message" translatable="false">Try to start training in the street avoiding to pay for a gym membership!</string>
+    <string name="set_data" translatable="false">Please set your athlete profile:</string>
+    <string name="set_weight" translatable="false">Weight:</string>
+    <string name="set_height" translatable="false">Height:</string>
+    <string name="set_gender" translatable="false">Gender:</string>
+    <string name="set_level" translatable="false">Level:</string>
+    <string name="genderMale" translatable="false">Male</string>
+    <string name="genderFemale" translatable="false">Female</string>
+    <string name="levelBeginner" translatable="false">Beginner</string>
+    <string name="levelMedium" translatable="false">Medium</string>
+    <string name="levelProfesional" translatable="false">Profesional</string>
+    <string name="startRoutines" translatable="false">Enter</string>
+    <string name="title_activity_routines_acivity" translatable="false">RoutinesAcivity</string>
+    <string name="title_activity_nav_drawer">Routines</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="One_hello_blank_fragment">One: Routines List</string>
+    <string name="Two_hello_blank_fragment">Two: Create a routine</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
