@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FragmentTwo">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
+    <ListView
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="@string/Two_hello_blank_fragment"
-        android:gravity="center"
-        android:textSize="24sp" />
+        android:id="@+id/listCategories2">
+    </ListView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@android:color/black" />
 </FrameLayout>

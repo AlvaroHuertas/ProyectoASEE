@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.unex.proyectoasee_nogymmembership.Adapters.CategoryAdapter;
+import com.unex.proyectoasee_nogymmembership.Models.Category;
+
 import java.util.ArrayList;
 
 
@@ -32,18 +35,21 @@ public class FragmentOne extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragment_one, container, false);
 
         //Definimos la lista a partir del view inflated
-        listCategories = (ListView) view.findViewById(R.id.listCategories);
+        listCategories = (ListView) view.findViewById(R.id.listCategories1);
 
+        //TODO - Categorias basadas en nivel dependen del nivel establecido en preferencias
+        Category c1 = new Category("Rutinas basadas en nivel", "Medium");
+        Category c2 = new Category("Rutinas enfocadas a movimientos", "Medium");
         //Utilizamos un array de prueba
         //TODO - Establecer este array a partir de un .xml que contenga las categorias
-        ArrayList<String> test = new ArrayList<>();
-        test.add("Hola");
-        test.add("mundo");
+        ArrayList<Category> test = new ArrayList<Category>();
+        test.add(c1);
+        test.add(c2);
 
         //Adapter para la lista
-        ArrayAdapter adapt;
-        adapt = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, test);
-        listCategories.setAdapter(adapt);
+
+        CategoryAdapter adapter = new CategoryAdapter(getContext(), test);
+        listCategories.setAdapter(adapter);
 
         return view;
     }
