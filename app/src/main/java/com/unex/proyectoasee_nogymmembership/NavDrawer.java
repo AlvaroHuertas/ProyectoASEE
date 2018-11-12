@@ -24,10 +24,15 @@ public class NavDrawer extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Asignar el layout que contiene ambas pantallas
         TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
+
+        //Asignar el layout que contiene el ViewPager
         ViewPager pager=(ViewPager)findViewById(R.id.viewpager);
 
+        //Creación del adaptador
         tabpagerAdapter tabPagerAdapter = new tabpagerAdapter(getSupportFragmentManager());
+        //Pasar el adapter al pager para la creacion de los fragments
         pager.setAdapter(tabPagerAdapter);
         tabLayout.setupWithViewPager(pager);
 
@@ -39,6 +44,9 @@ public class NavDrawer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Cargar las preferencias con los valores por defecto
+        PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
     }
 
     @Override
@@ -75,7 +83,13 @@ public class NavDrawer extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //Mostrar el SettingsFragment como contenido principal
+            getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content,new SettingsFragment())
+                    .addToBackStack(null)
+                    .commit();
             return true;
+
         }
 
         return super.onOptionsItemSelected(item);

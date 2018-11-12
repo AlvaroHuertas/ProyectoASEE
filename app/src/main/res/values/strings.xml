@@ -20,9 +20,11 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="title_fragment_one">LIST OF ROUTINES</string>
+    <string name="title_fragment_two">CREATE ROUTINE</string>
     <string name="nightmode">Night Mode</string>
     <string name="nightmode_sum">Activate the night mode to dim the screen</string>
-    <string name="username"></string>
+    <string name="username">Change User Name</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="One_hello_blank_fragment">One: Routines List</string>
