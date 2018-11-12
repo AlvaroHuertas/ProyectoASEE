@@ -1,6 +1,8 @@
 package com.unex.proyectoasee_nogymmembership;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -37,6 +39,14 @@ public class NavDrawer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String username;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        username=sharedPref.getString(SettingsFragment.KEY_PREF_USERNAME,"");
     }
 
     @Override

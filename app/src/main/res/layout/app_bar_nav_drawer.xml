@@ -26,13 +26,11 @@
             <android.support.design.widget.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="ROUTINE"/>
+                android:layout_weight="1"/>
             <android.support.design.widget.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="CREATE ROUTINE"/>
+                android:layout_weight="1"/>
 
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
