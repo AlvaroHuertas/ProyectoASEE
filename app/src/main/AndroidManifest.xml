@@ -27,9 +27,11 @@
             android:name=".NavDrawer"
             android:label="@string/title_activity_nav_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddCategoryActivity"
+        <activity android:name=".Adds.AddCategoryActivity"
             android:theme="@style/AppTheme.PopupMe">
         </activity>
+        <activity android:name=".RoutinesManagerActivity" />
+        <activity android:name=".Adds.AddRoutineActivity" />
     </application>
 
 </manifest>

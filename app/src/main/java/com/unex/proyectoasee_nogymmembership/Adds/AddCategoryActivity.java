@@ -1,4 +1,4 @@
-package com.unex.proyectoasee_nogymmembership;
+package com.unex.proyectoasee_nogymmembership.Adds;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.unex.proyectoasee_nogymmembership.Models.Category;
+import com.unex.proyectoasee_nogymmembership.R;
 
 public class AddCategoryActivity extends Activity {
 

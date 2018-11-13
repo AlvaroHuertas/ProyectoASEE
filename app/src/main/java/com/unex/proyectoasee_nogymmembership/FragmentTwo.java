@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.CategoryAdapter;
+import com.unex.proyectoasee_nogymmembership.Adds.AddCategoryActivity;
 import com.unex.proyectoasee_nogymmembership.Models.Category;
 
 import java.util.ArrayList;
@@ -60,6 +60,7 @@ public class FragmentTwo extends Fragment {
         //Definimos nuestro adapter personalizado
         mAdapter = new CategoryAdapter(getContext(), test);
 
+
         listCategories.setAdapter(mAdapter);
 
         //Listener para elementos de la lista
@@ -67,7 +68,10 @@ public class FragmentTwo extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Snackbar.make(view, "Seleccionando", Snackbar.LENGTH_LONG)
+                Intent i1 = new Intent(getContext(), RoutinesManagerActivity.class);
+                startActivity(i1);
+
+                Snackbar.make(view, "Seleccionando" + position, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

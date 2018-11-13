@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class CategoryAdapter extends ArrayAdapter {
 
+
     public CategoryAdapter(Context context, ArrayList<Category> categories) {
         super(context, 0, categories);
     }
@@ -38,4 +39,6 @@ public class CategoryAdapter extends ArrayAdapter {
         //Devolvemos la vista para mostrarla en pantalla
         return convertView;
     }
+
+
 }
