@@ -36,4 +36,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="string_enter_name">Enter name...</string>
     <string name="string_enter_type">pull, push, legs, etc</string>
+    <string name="load_data_string">Load Data</string>
 </resources>

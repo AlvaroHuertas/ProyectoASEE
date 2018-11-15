@@ -124,7 +124,7 @@ public class FragmentOne extends Fragment {
 
         // ALTERNATIVE: Save all ToDoItems
 
-    }
+        }
 
     @Override
     public void onDestroy() {
@@ -142,5 +142,6 @@ public class FragmentOne extends Fragment {
         RoutineList routineItems = new RoutineList(items);
         mAdapter.load(routineItems);
     }
+
 
 }

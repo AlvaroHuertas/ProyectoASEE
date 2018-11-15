@@ -10,6 +10,5 @@
         android:defaultValue="Android Studio"
         android:key="pref_username"
         android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/username" />
+        android:singleLine="true" />
 </PreferenceScreen>
