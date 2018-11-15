@@ -11,6 +11,15 @@ public class RoutineList {
         elements = new ArrayList<>();
     }
 
+    public RoutineList(List<Routine> e){
+        elements = e;
+    }
+
+
+    public void clear(){
+        elements.clear();
+    }
+
     public void addItem(Routine item){
         elements.add(item);
     }

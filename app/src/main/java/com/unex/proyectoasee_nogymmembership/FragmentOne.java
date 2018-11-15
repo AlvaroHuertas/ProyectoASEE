@@ -1,18 +1,24 @@
 package com.unex.proyectoasee_nogymmembership;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Toast;
 
-import com.unex.proyectoasee_nogymmembership.Adapters.CategoryAdapter;
-import com.unex.proyectoasee_nogymmembership.Models.Category;
+import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
+import com.unex.proyectoasee_nogymmembership.Adds.AddRoutineActivity;
+import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
+import com.unex.proyectoasee_nogymmembership.Models.Routine;
+import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,7 +26,14 @@ import java.util.ArrayList;
  */
 public class FragmentOne extends Fragment {
 
-    ListView listCategories;
+
+    // Add a Routine Request Code
+    private static final int ADD_ROUTINE_ITEM_REQUEST = 0;
+    public static final int RESULT_OK = -1;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RoutineAdapter mAdapter;
 
     public FragmentOne() {
         // Required empty public constructor
@@ -31,27 +44,103 @@ public class FragmentOne extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //Inflate del layout para el fragment
-        View view = inflater.inflate(R.layout.fragment_fragment_one, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_fragment_one, container, false);
 
-        //Definimos la lista a partir del view inflated
-        listCategories = (ListView) view.findViewById(R.id.listCategories1);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabroutines);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // - Attach Listener to FloatingActionButton. Implement onClick()
+                Intent intent = new Intent(getContext(), AddRoutineActivity.class);
+                startActivityForResult(intent,ADD_ROUTINE_ITEM_REQUEST);
+            }
+        });
 
-        //TODO - Categorias basadas en nivel dependen del nivel establecido en preferencias
-        Category c1 = new Category("Rutinas basadas en nivel", "Medium");
-        Category c2 = new Category("Rutinas enfocadas a movimientos", "Medium");
-        //Utilizamos un array de prueba
-        //TODO - Establecer este array a partir de un .xml que contenga las categorias
-        ArrayList<Category> test = new ArrayList<Category>();
-        test.add(c1);
-        test.add(c2);
+        //Obtenemos referencia a la RecyclerView
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.routines_recycler);
 
-        //Adapter para la lista
+        //Este ajuste mejorará el desempeño de la RecyclerVew si sabemos que introduciendo
+        //más contenido no cambiará el tamaño del layout
+        mRecyclerView.setHasFixedSize(true);
 
-        CategoryAdapter adapter = new CategoryAdapter(getContext(), test);
-        listCategories.setAdapter(adapter);
+        //Definimos un linear layout manager
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
-        return view;
+
+        //Definir el adapter para la RecyclerView
+        mAdapter = new RoutineAdapter(getContext(), new RoutineAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Routine item) {
+               Toast toast = Toast.makeText(getContext(), "Item " + item.getName() + " de tipo " + item.getType(), Toast.LENGTH_SHORT);
+               toast.show();
+            }
+        });
+
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //  - Check result code and request code.
+        // If user submitted a new Routine
+        // Create a new Routine from the data Intent
+        // and then add it to the adapter
+        if (requestCode == ADD_ROUTINE_ITEM_REQUEST){
+            if (resultCode == RESULT_OK){
+                Routine item = new Routine(data);
+
+                //insert into DB
+                RoutineCRUD crud = RoutineCRUD.getInstance(getContext());
+                long id = crud.insert(item);
+
+                //update item ID
+                item.setId(id);
+
+                //insert into adapter list
+                mAdapter.add(item);
+            }
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Load saved ToDoItems, if necessary
+
+        if (mAdapter.getItemCount() == 0)
+            loadItems();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // ALTERNATIVE: Save all ToDoItems
+
+    }
+
+    @Override
+    public void onDestroy() {
+        RoutineCRUD crud = RoutineCRUD.getInstance(getContext());
+        crud.close();
+        super.onDestroy();
+    }
+
+
+
+    // Load stored Routines
+    private void loadItems() {
+        RoutineCRUD crud = RoutineCRUD.getInstance(getContext());
+        List<Routine> items = crud.getAll();
+        RoutineList routineItems = new RoutineList(items);
+        mAdapter.load(routineItems);
     }
 
 }

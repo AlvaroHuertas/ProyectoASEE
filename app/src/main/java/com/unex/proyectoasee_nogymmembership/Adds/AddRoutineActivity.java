@@ -53,11 +53,12 @@ public class AddRoutineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //TODO -  Title
+
                 String nameString = mNameText.getText().toString();
 
-                // Date
                 String typeString = mType.getText().toString();
+
+                
 
                 Intent data = new Intent();
                 Routine.packageIntent(data, nameString, typeString);
