@@ -1,5 +1,6 @@
 package com.unex.proyectoasee_nogymmembership;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,8 +12,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +50,7 @@ public class NavDrawer extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         //Cargar las preferencias con los valores por defecto
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
     }
@@ -55,7 +61,14 @@ public class NavDrawer extends AppCompatActivity
         String username;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         username=sharedPref.getString(SettingsFragment.KEY_PREF_USERNAME,"");
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+
+        TextView textView = (TextView) header.findViewById(R.id.textView);
+        textView.setText(username);
     }
+
 
     @Override
     public void onBackPressed() {

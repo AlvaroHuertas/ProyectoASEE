@@ -25,11 +25,11 @@ public class SettingsFragment extends PreferenceFragment {
         //Establece el color de fondo de la pantalla de preferencias
         view.setBackgroundColor(getResources().getColor(android.R.color.white));
 
-        /*int horizontalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
+        int horizontalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
         int verticalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
         int topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int) getResources().getDimension(R.dimen.activity_vertical_margin) + 30, getResources().getDisplayMetrics());
 
-        view.setPadding(horizontalMargin, topMargin, horizontalMargin, verticalMargin);*/
+        view.setPadding(horizontalMargin, topMargin, horizontalMargin, verticalMargin);
 
 
 

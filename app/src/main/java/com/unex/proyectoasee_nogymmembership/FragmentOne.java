@@ -51,7 +51,9 @@ public class FragmentOne extends Fragment {
         CategoryAdapter adapter = new CategoryAdapter(getContext(), test);
         listCategories.setAdapter(adapter);
 
+
         return view;
     }
+
 
 }
