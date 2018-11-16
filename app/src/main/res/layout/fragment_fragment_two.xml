@@ -6,18 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".FragmentTwo">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/listCategories2">
-    </ListView>
+    <include layout="@layout/content_exercises_manager" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addCategory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@android:color/black" />
 </FrameLayout>

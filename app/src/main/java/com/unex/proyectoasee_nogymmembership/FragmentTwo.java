@@ -1,20 +1,33 @@
 package com.unex.proyectoasee_nogymmembership;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.unex.proyectoasee_nogymmembership.Adapters.CategoryAdapter;
-import com.unex.proyectoasee_nogymmembership.Models.Category;
+import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
+import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
+import com.unex.proyectoasee_nogymmembership.Models.Exercise;
+import com.unex.proyectoasee_nogymmembership.Networking.NetworkUtils;
+import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSONActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -24,46 +37,118 @@ public class FragmentTwo extends Fragment {
 
     ListView listCategories;
 
+    private static final int ADD_CATEGORY_REQUEST = 0;
+    public static final int RESULT_OK = -1;
+    //Definición de claces JSON
+    private static final String EXERCISE_ID_TAG = "results";
+    private static final String DESCRIPTION_TAG = "description";
+    private static final String NAME_TAG = "name";
+    private static final String CATEGORY_TAG = "category";
+    private static final String MUSCLES_TAG = "muscles";
+    private static RecyclerView mExercisesRecycler=null;
+
     public FragmentTwo() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         //Inflate del layout para el fragment
-        View view = inflater.inflate(R.layout.fragment_fragment_two, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_fragment_two, container, false);
+       this.mExercisesRecycler=(RecyclerView) rootView.findViewById(R.id.exercises_recycler);
 
-        //Definimos la lista a partir del view inflated
-        listCategories = (ListView) view.findViewById(R.id.listCategories2);
-
-        //Array de prueba
-        Category c1 = new Category("Category1", "Hard");
-        ArrayList<Category> test = new ArrayList<Category>();
-        test.add(c1);
+        /*startActivity(new Intent(getActivity(),
+                NetworkingAndroidHttpClientJSONActivity.class));*/
+        //Ejecutar petición GET
+        new HttpGetTask(getActivity()).execute();
 
 
-        //Definimos nuestro adapter personalizado
-        CategoryAdapter adapter = new CategoryAdapter(getContext(), test);
-
-        listCategories.setAdapter(adapter);
-
-        //Parte lógica del FAB para añadir categorias
-        FloatingActionButton fab = view.findViewById(R.id.addCategory);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Añadiendo movidas", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-                Intent i = new Intent(getContext(), AddCategoryActivity.class);
-                startActivity(i);
-            }
-        });
-
-        return view;
+        return rootView;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    private class HttpGetTask extends AsyncTask<Void, Void, List<Exercise>> {
+        private static final String BASE_URL ="wger.de";
+        private static final String JSON_SEG = "api";
+        private static final String JSON_SEG2 ="v2";
+        private static final String JSON_SEG3 ="exercise";
+        private static final String LANGUAGE_P = "language";
+        private static final String EQUIPMENT_P = "equipment";
+
+        private Context mContext;
+
+        private ExerciseAdapter mAdapter;
+        private View rootView;
+
+        public HttpGetTask(Context context){
+            mContext=context;
+        }
+
+        @Override
+        protected List<Exercise> doInBackground(Void... params) {
+            URL queryURL;
+            JSONObject result;
+
+            //Construir URI con los campos definidos arriba
+            queryURL = NetworkUtils.buildURL(BASE_URL,
+                    new String[]{JSON_SEG,JSON_SEG2,JSON_SEG3},
+                    new Pair(LANGUAGE_P, "2"),
+                    new Pair(EQUIPMENT_P, "7"));
+            result = NetworkUtils.getJSONResponse(queryURL);
+            if(result != null)
+                return jsonToList(result);
+
+            return null;
+        }
+
+        protected void onPostExecute(List<Exercise> result) {
+            LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
+            mExercisesRecycler.setLayoutManager(lay_Manager);
+            mAdapter= new ExerciseAdapter(mContext,result);
+            mExercisesRecycler.setAdapter(mAdapter);
+
+        }
+
+    }
+
+    public List<Exercise> jsonToList(JSONObject responseObject) {
+        List<Exercise> result = new ArrayList<>();
+
+        try {
+
+
+            JSONArray exercises = responseObject
+                    .getJSONArray(EXERCISE_ID_TAG);
+            //TODO obtener todos los ejercicios y construir los objetos
+            for (int idx = 0; idx < exercises.length(); idx++) {
+
+                // Get single exercise data - a Map
+                JSONObject exercise = (JSONObject) exercises.get(idx);
+
+                Exercise exerciseObj= new Exercise(exercise.get(NAME_TAG).toString(),exercise.get(DESCRIPTION_TAG).toString(),"","");
+
+                result.add(exerciseObj);
+
+                // Summarize exercise data as a string and add it to
+                // result
+                /*result.add(NAME_TAG + ":"
+                        + exercise.get(NAME_TAG) + ","
+                        + DESCRIPTION_TAG + ":"
+                        + exercise.getString(DESCRIPTION_TAG));*/
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 
 }
