@@ -6,5 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".FragmentTwo">
 
+    <include layout="@layout/content_exercises_manager" />
 
 </FrameLayout>

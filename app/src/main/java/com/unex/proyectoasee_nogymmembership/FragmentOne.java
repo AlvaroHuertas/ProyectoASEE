@@ -72,8 +72,8 @@ public class FragmentOne extends Fragment {
         mAdapter = new RoutineAdapter(getContext(), new RoutineAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Routine item) {
-               Toast toast = Toast.makeText(getContext(), "Item " + item.getName() + " de tipo " + item.getType(), Toast.LENGTH_SHORT);
-               toast.show();
+                Toast toast = Toast.makeText(getContext(), "Item " + item.getName() + " de tipo " + item.getType(), Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
 
@@ -142,6 +142,5 @@ public class FragmentOne extends Fragment {
         RoutineList routineItems = new RoutineList(items);
         mAdapter.load(routineItems);
     }
-
 
 }

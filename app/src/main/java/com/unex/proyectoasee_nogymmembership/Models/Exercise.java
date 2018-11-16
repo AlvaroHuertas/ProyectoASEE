@@ -3,7 +3,7 @@ package com.unex.proyectoasee_nogymmembership.Models;
 public class Exercise {
     public String name;
     public String description;
-    /*public String category;*/
+    public String category;
     public String muscles;
     public String imageURI;
 
