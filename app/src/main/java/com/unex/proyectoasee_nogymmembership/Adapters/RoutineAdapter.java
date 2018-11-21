@@ -1,6 +1,8 @@
 package com.unex.proyectoasee_nogymmembership.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
@@ -23,6 +26,37 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     Context mContext;
 
     private RoutineList routineList = new RoutineList();
+
+    private AlertDialog AskOption(final Routine item, final int position)
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(mContext)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_name)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        delete(item, position);
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
 
     public void load(RoutineList items) {
         routineList.clear();
@@ -55,13 +89,30 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(routineList.get(position),listener);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.bind(routineList.get(position), listener);
+
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+               AlertDialog diaBox = AskOption(routineList.get(position), position);
+               diaBox.show();
+                return false;
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return routineList.size();
+    }
+
+    public void delete(Routine item, int position){
+        routineList.deleteItem(position);
+        RoutineCRUD crud = RoutineCRUD.getInstance(mContext);
+        crud.deleteItem(item.getId());
+        notifyDataSetChanged();
     }
 
     public void add(Routine item) {
@@ -70,7 +121,6 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         notifyDataSetChanged();
 
     }
-
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -92,7 +142,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
             status = (CheckBox) itemView.findViewById(R.id.statusCheckBox);
         }
 
-        public void bind(final Routine routine, final OnItemClickListener listener){
+        public void bind(final Routine routine, final OnItemClickListener listener) {
 
             name.setText(routine.getName());
 
@@ -103,18 +153,18 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
             status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
+                    if (isChecked) {
                         routine.setStatus(Routine.Status.DONE);
 
                         name.setBackgroundColor(Color.GREEN);
-                    } else{
+                    } else {
                         routine.setStatus(Routine.Status.NOTDONE);
 
                         name.setBackgroundColor(Color.WHITE);
                     }
 
                     RoutineCRUD crud = RoutineCRUD.getInstance(mContext);
-                    crud.updateStatus(routine.getId(),routine.getStatus());
+                    crud.updateStatus(routine.getId(), routine.getStatus());
                 }
             });
 

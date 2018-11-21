@@ -95,6 +95,16 @@ public class RoutineCRUD {
         db.delete(DBContract.Routine.TABLE_NAME, selection, selectionArgs);
     }
 
+    public void deleteItem(long id){
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        String selection = DBContract.Routine._ID + " = ?";
+
+        String[] selectionArgs = { Long.toString(id) };
+
+        db.delete(DBContract.Routine.TABLE_NAME,selection,selectionArgs);
+    }
+
     public int updateStatus(long ID, Routine.Status status) {
 
         SQLiteDatabase db = mDbHelper.getReadableDatabase();

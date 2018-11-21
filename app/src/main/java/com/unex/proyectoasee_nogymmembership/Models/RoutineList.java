@@ -24,6 +24,10 @@ public class RoutineList {
         elements.add(item);
     }
 
+    public void deleteItem(int position){
+        elements.remove(position);
+    }
+
     public void deleteAllItems(){
         elements.clear();
     }

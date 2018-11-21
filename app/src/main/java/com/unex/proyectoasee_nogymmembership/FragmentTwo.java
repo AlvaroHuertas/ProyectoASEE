@@ -68,10 +68,6 @@ public class FragmentTwo extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
 
     private class HttpGetTask extends AsyncTask<Void, Void, List<Exercise>> {
         private static final String BASE_URL ="wger.de";
@@ -107,6 +103,7 @@ public class FragmentTwo extends Fragment {
             return null;
         }
 
+        @Override
         protected void onPostExecute(List<Exercise> result) {
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
