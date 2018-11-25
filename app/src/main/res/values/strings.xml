@@ -37,4 +37,9 @@
     <string name="string_enter_name">Enter name...</string>
     <string name="string_enter_type">pull, push, legs, etc</string>
     <string name="load_data_string">Load Data</string>
+    <string name="action_preferences">Preferences</string>
+    <string name="done">Done!</string>
+    <string name="defaultValues">NOTE: By default the weight and height values will be setted as 70 kg and 175 cm</string>
+    <string name="defaultWeight">70</string>
+    <string name="defaultHeight">175</string>
 </resources>

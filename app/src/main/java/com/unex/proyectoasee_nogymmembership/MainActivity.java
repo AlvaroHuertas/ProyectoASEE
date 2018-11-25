@@ -3,77 +3,84 @@ package com.unex.proyectoasee_nogymmembership;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.unex.proyectoasee_nogymmembership.AppBarUtils.SettingsFragment;
+import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
 
-    EditText weight, height;
-    RadioGroup gender, level;
-    RadioButton defaultGenderButton, defaultLevelButton;
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_nav_drawer);
 
-        Button enterButton = (Button) findViewById(R.id.buttonEnter);
-        enterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPreferences();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-                Intent start = new Intent(v.getContext(), NavDrawer.class);
-                startActivity(start);
+        //Asignar el layout que contiene ambas pantallas
+        TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
 
-            }
-        });
+        //Asignar el layout que contiene el ViewPager
+        ViewPager pager=(ViewPager)findViewById(R.id.viewpager);
+
+        //Creación del adaptador
+        tabpagerAdapter tabPagerAdapter = new tabpagerAdapter(getSupportFragmentManager());
+        //Pasar el adapter al pager para la creacion de los fragments
+        pager.setAdapter(tabPagerAdapter);
+        tabLayout.setupWithViewPager(pager);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        //Cargar las preferencias con los valores por defecto
+        PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
     }
 
-    public void setPreferences(){
-        int radioId;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String username;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        username=sharedPref.getString(SettingsFragment.KEY_PREF_USERNAME,"");
 
-        //Recuperamos la información introducida sobre peso y altura
-        weight = (EditText) findViewById(R.id.weight);
-        height = (EditText) findViewById(R.id.height);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
 
-
-
-        //Recuperamos el género y el nivel seleccionado
-        gender = (RadioGroup) findViewById(R.id.selectionGender);
-        radioId = gender.getCheckedRadioButtonId();
-        defaultGenderButton = (RadioButton) findViewById(radioId);
-        level = (RadioGroup) findViewById(R.id.selectionLevel);
-        radioId = level.getCheckedRadioButtonId();
-        defaultLevelButton = (RadioButton) findViewById(radioId);
-
-        //Fichero donde vamos a guardar las preferencias
-        SharedPreferences preferences = getSharedPreferences("atributos", getApplicationContext().MODE_PRIVATE);
-
-        //Creamos el editor para modificar el fichero. Se trata de un fichero clave-valor
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putFloat("weight", Float.valueOf(weight.getText().toString()));
-        editor.putFloat("height", Float.valueOf(height.getText().toString()));
-        editor.putString("gender", defaultGenderButton.getText().toString());
-        editor.putString("level", defaultLevelButton.getText().toString());
-
-
-        //Prueba
-        Toast toast = Toast.makeText(getApplicationContext(), preferences.getString("gender", "No info"), Toast.LENGTH_LONG);
-        toast.show();
-
-        editor.commit();
+        TextView textView = (TextView) header.findViewById(R.id.textView);
+        textView.setText(username);
     }
 
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,9 +98,43 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //Mostrar el SettingsFragment como contenido principal
+            getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content,new SettingsFragment())
+                    .addToBackStack(null)
+                    .commit();
             return true;
+
+        }else if(id == R.id.action_preferences){
+            Intent intent = new Intent(getApplicationContext(), UserPreferences.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
