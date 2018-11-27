@@ -84,6 +84,7 @@ public class NetworkingAndroidHttpClientJSONActivity extends ListActivity {
             return null;
         }
 
+
         protected void onPostExecute(List<Exercise> result) {
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);

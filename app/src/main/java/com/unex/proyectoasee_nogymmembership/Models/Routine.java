@@ -2,8 +2,11 @@ package com.unex.proyectoasee_nogymmembership.Models;
 
 import android.content.Intent;
 
+import java.io.Serializable;
+import java.util.List;
 
-public class Routine {
+
+public class Routine implements Serializable {
 
     public enum Status {
         NOTDONE, DONE
@@ -13,6 +16,7 @@ public class Routine {
     private String name;
     private String type;
     private Status status;
+    private List<Exercise> exercises;
 
     public final static String ID = "ID";
     public final static String NAME = "name";

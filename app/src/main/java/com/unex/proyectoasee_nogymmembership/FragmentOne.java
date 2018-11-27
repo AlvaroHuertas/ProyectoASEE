@@ -3,6 +3,8 @@ package com.unex.proyectoasee_nogymmembership;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,7 +48,14 @@ public class FragmentOne extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_fragment_one, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fabroutines);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fabroutines);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +66,7 @@ public class FragmentOne extends Fragment {
         });
 
         //Obtenemos referencia a la RecyclerView
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.routines_recycler);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.routines_recycler);
 
         //Este ajuste mejorará el desempeño de la RecyclerVew si sabemos que introduciendo
         //más contenido no cambiará el tamaño del layout
@@ -72,16 +81,18 @@ public class FragmentOne extends Fragment {
         mAdapter = new RoutineAdapter(getContext(), new RoutineAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Routine item) {
-                Toast toast = Toast.makeText(getContext(), "Item " + item.getName() + " de tipo " + item.getType(), Toast.LENGTH_SHORT);
-                toast.show();
+                Intent intent = new Intent(getContext(), ShowRoutine.class);
+                intent.putExtra("Routine", item);
+                startActivity(intent);
             }
         });
 
         mRecyclerView.setAdapter(mAdapter);
 
 
-        return rootView;
+
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

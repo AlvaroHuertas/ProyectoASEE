@@ -59,8 +59,7 @@ public class FragmentTwo extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_fragment_two, container, false);
        this.mExercisesRecycler=(RecyclerView) rootView.findViewById(R.id.exercises_recycler);
 
-        /*startActivity(new Intent(getActivity(),
-                NetworkingAndroidHttpClientJSONActivity.class));*/
+
         //Ejecutar petición GET
         new HttpGetTask(getActivity()).execute();
 
