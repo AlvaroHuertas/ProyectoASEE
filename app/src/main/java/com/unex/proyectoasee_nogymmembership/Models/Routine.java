@@ -16,7 +16,7 @@ public class Routine implements Serializable {
     private String name;
     private String type;
     private Status status;
-    private List<Exercise> exercises;
+    private ExerciseList exercises;
 
     public final static String ID = "ID";
     public final static String NAME = "name";
@@ -29,12 +29,14 @@ public class Routine implements Serializable {
         this.name = name;
         this.type = type;
         this.status = Status.valueOf(status);
+        this.exercises = new ExerciseList();
     }
 
     public Routine(Intent intent) {
         id = intent.getLongExtra(Routine.ID, 0);
         name = intent.getStringExtra(Routine.NAME);
         type = intent.getStringExtra(Routine.TYPE);
+        this.exercises = new ExerciseList();
 
         //Rutina por defecto no realizada
         status = Status.NOTDONE;

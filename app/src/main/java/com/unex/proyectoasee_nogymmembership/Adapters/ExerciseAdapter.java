@@ -11,53 +11,81 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
+import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.R;
 
 import java.util.List;
 
-public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder>{
-    Context context;
-    List<Exercise> exerciseList;
+public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
+    private Context context;
+    private ExerciseList exerciseList;
 
-    public ExerciseAdapter(Context context, List<Exercise> exerciseList){
-        this.context = context;
-        this.exerciseList=exerciseList;
-
+    public interface OnItemClickListener {
+        void onItemClick(Exercise item);     //Type of the element to be returned
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        CardView cardView;
-        TextView name,description;
+    private final OnItemClickListener listener;
 
-        public ViewHolder(View item){
+    public ExerciseAdapter(Context context, ExerciseList exerciseList) {
+        this.context = context;
+        this.exerciseList = exerciseList;
+        this.listener = null;
+    }
+
+    public ExerciseAdapter(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public ExerciseAdapter(Context context, OnItemClickListener listener) {
+        this.context = context;
+        this.listener = listener;
+    }
+
+
+    @NonNull
+    @Override
+    public ExerciseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        View itemView = (View) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_exercise, parent, false);
+        ViewHolder viewHolder = new ViewHolder(itemView);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ExerciseAdapter.ViewHolder viewHolder, int i) {
+        viewHolder.bind(exerciseList.getElements().get(i), listener);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (exerciseList.getElements() != null)
+            return exerciseList.getElements().size();
+        else
+            Log.i("ExerciseList:", "is NULL");
+        return 0;
+    }
+
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
+        private TextView name, description;
+
+        public ViewHolder(View item) {
             super(item);
             cardView = (CardView) item.findViewById(R.id.cardView);
             name = (TextView) item.findViewById(R.id.exercise_name);
             description = (TextView) item.findViewById(R.id.exercise_description);
 
         }
+
+        public void bind(final Exercise exercise, final OnItemClickListener listener) {
+            name.setText(exercise.getName());
+            description.setText(exercise.getDescription());
+        }
     }
 
-    @NonNull
-        @Override
-        public ExerciseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_exercise,viewGroup,false);
-            ViewHolder viewHolder=new ViewHolder(itemView);
-        return viewHolder;
-    }
 
-    @Override
-    public void onBindViewHolder(@NonNull ExerciseAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.name.setText(exerciseList.get(i).getName());
-        viewHolder.description.setText(exerciseList.get(i).getDescription());
-    }
 
-    @Override
-    public int getItemCount() {
-        if(exerciseList != null)
-            return exerciseList.size();
-        else
-            Log.i("ExerciseList:", "is NULL");
-        return 0;
-    }
+
 }

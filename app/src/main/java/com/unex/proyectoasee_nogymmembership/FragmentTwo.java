@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
+import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkUtils;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSONActivity;
 
@@ -81,6 +82,8 @@ public class FragmentTwo extends Fragment {
         private ExerciseAdapter mAdapter;
         private View rootView;
 
+        private ExerciseList exerciseList;
+
         public HttpGetTask(Context context){
             mContext=context;
         }
@@ -106,7 +109,8 @@ public class FragmentTwo extends Fragment {
         protected void onPostExecute(List<Exercise> result) {
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
-            mAdapter= new ExerciseAdapter(mContext,result);
+            exerciseList = new ExerciseList(result);
+            mAdapter= new ExerciseAdapter(mContext,exerciseList);
             mExercisesRecycler.setAdapter(mAdapter);
 
         }

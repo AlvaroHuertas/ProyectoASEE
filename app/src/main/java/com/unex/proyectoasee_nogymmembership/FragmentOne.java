@@ -89,8 +89,6 @@ public class FragmentOne extends Fragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
-
-
     }
 
 

@@ -14,6 +14,7 @@ import android.widget.ListAdapter;
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
+import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.R;
 
 import org.json.JSONArray;
@@ -59,6 +60,8 @@ public class NetworkingAndroidHttpClientJSONActivity extends ListActivity {
         private ExerciseAdapter mAdapter;
         private View rootView;
 
+        private ExerciseList exerciseList;
+
         public HttpGetTask(Context context, RecyclerView mExercisesRecycler){
             mContext=context;
             Layout inflater;
@@ -88,7 +91,8 @@ public class NetworkingAndroidHttpClientJSONActivity extends ListActivity {
         protected void onPostExecute(List<Exercise> result) {
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
-            mAdapter= new ExerciseAdapter(mContext,result);
+            exerciseList = new ExerciseList(result);
+            mAdapter= new ExerciseAdapter(mContext,exerciseList);
             mExercisesRecycler.setAdapter(mAdapter);
 
         }

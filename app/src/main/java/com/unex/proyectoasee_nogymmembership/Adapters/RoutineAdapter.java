@@ -23,9 +23,26 @@ import java.util.List;
 
 public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHolder> {
 
-    Context mContext;
+    private Context mContext;
 
     private RoutineList routineList = new RoutineList();
+
+    public interface OnItemClickListener {
+        void onItemClick(Routine item);     //Type of the element to be returned
+    }
+
+    private final OnItemClickListener listener;
+
+    public RoutineAdapter(Context context, OnItemClickListener listener) {
+        mContext = context;
+        this.listener = listener;
+    }
+
+    public RoutineAdapter(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+
 
     private AlertDialog AskOption(final Routine item, final int position)
     {
@@ -64,21 +81,6 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Routine item);     //Type of the element to be returned
-    }
-
-    private final OnItemClickListener listener;
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public RoutineAdapter(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
-    public RoutineAdapter(Context context, OnItemClickListener listener) {
-        mContext = context;
-        this.listener = listener;
-    }
 
     @Override
     public RoutineAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
@@ -121,6 +123,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         notifyDataSetChanged();
 
     }
+
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
