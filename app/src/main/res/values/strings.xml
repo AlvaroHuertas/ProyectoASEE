@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">ProyectoASEE_NoGymMembership</string>
+    <string name="app_name" translatable="false">NoGymMembership</string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="welcome_message" translatable="false">Try to start training in the street avoiding to pay for a gym membership!</string>
     <string name="set_data" translatable="false">Please set your athlete profile:</string>

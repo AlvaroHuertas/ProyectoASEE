@@ -33,6 +33,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     }
 
     public ExerciseAdapter(OnItemClickListener listener) {
+        this.exerciseList = new ExerciseList();
         this.listener = listener;
     }
 
