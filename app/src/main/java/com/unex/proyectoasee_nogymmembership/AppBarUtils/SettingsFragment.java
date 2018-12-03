@@ -1,16 +1,13 @@
-package com.unex.proyectoasee_nogymmembership;
+package com.unex.proyectoasee_nogymmembership.AppBarUtils;
 
-import android.content.Context;
-import android.net.Uri;
 import android.util.*;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
+import com.unex.proyectoasee_nogymmembership.R;
 
 
 public class SettingsFragment extends PreferenceFragment {
