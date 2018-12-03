@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -17,6 +20,8 @@ import android.widget.ListView;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
+import com.unex.proyectoasee_nogymmembership.Adds.ExerciseDescActivity;
+import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkUtils;
 
@@ -70,7 +75,6 @@ public class FragmentTwo extends Fragment {
         return rootView;
     }
 
-
     private class HttpGetTask extends AsyncTask<Void, Void, List<Exercise>> {
         private static final String BASE_URL ="wger.de";
         private static final String JSON_SEG = "api";
@@ -116,6 +120,13 @@ public class FragmentTwo extends Fragment {
 
         @Override
         protected void onPostExecute(List<Exercise> result) {
+            ExerciseCRUD crud = ExerciseCRUD.getInstance(getContext());
+            /*List<Exercise> prueba=crud.getAll();*/
+            for (int i = 0; i < result.size(); i++){
+                Exercise item=result.get(i);
+                long id = crud.insert(item);
+                item.setId(id);
+            }
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
             mAdapter= new ExerciseAdapter(mContext,result);
@@ -139,7 +150,7 @@ public class FragmentTwo extends Fragment {
                 // Get single exercise data - a Map
                 JSONObject exercise = (JSONObject) exercises.get(idx);
 
-                Exercise exerciseObj= new Exercise(exercise.get(NAME_TAG).toString(),exercise.get(DESCRIPTION_TAG).toString(),"","");
+                Exercise exerciseObj= new Exercise(idx,exercise.get(NAME_TAG).toString(),exercise.get(DESCRIPTION_TAG).toString(),"");
 
                 result.add(exerciseObj);
 

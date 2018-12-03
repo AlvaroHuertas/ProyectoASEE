@@ -1,18 +1,23 @@
 package com.unex.proyectoasee_nogymmembership.Models;
 
 public class Exercise {
-    public String name;
-    public String description;
-    public String category;
-    public String muscles;
-    public String imageURI;
 
-    public Exercise(String name, String description, String muscles, String imageuri){
+    private long id;
+    private String name;
+    private String description;
+    private String category;
+    private String imageURI;
+
+    public Exercise(long id,String name, String description, String imageuri){
+        this.id=id;
         this.name=name;
         this.description=description;
-        this.muscles=muscles;
         this.imageURI=imageuri;
     }
+
+    public long getId() { return id; }
+
+    public void setId(long id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -20,10 +25,6 @@ public class Exercise {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getMuscles() {
-        return muscles;
     }
 
     public String getURI() {
