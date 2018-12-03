@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -17,10 +20,11 @@ import android.widget.ListView;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
+import com.unex.proyectoasee_nogymmembership.Adds.ExerciseDescActivity;
+import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkUtils;
-import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSONActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,13 +44,18 @@ public class FragmentTwo extends Fragment {
 
     private static final int ADD_CATEGORY_REQUEST = 0;
     public static final int RESULT_OK = -1;
-    //Definición de claces JSON
-    private static final String EXERCISE_ID_TAG = "results";
+    //Definición de clases JSON
+    private static final String EXERCISE_TAG = "results";
     private static final String DESCRIPTION_TAG = "description";
     private static final String NAME_TAG = "name";
     private static final String CATEGORY_TAG = "category";
     private static final String MUSCLES_TAG = "muscles";
+    private static final String IMAGE_TAG = "image";
+
     private static RecyclerView mExercisesRecycler=null;
+
+
+
 
     public FragmentTwo() {
         // Required empty public constructor
@@ -60,7 +69,6 @@ public class FragmentTwo extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_fragment_two, container, false);
        this.mExercisesRecycler=(RecyclerView) rootView.findViewById(R.id.exercises_recycler);
 
-
         //Ejecutar petición GET
         new HttpGetTask(getActivity()).execute();
 
@@ -68,14 +76,15 @@ public class FragmentTwo extends Fragment {
         return rootView;
     }
 
-
     private class HttpGetTask extends AsyncTask<Void, Void, List<Exercise>> {
         private static final String BASE_URL ="wger.de";
         private static final String JSON_SEG = "api";
         private static final String JSON_SEG2 ="v2";
-        private static final String JSON_SEG3 ="exercise";
+        private static final String JSON_SEG_EX ="exercise";
+        private static final String JSON_SEG_IMG="exerciseimage";
         private static final String LANGUAGE_P = "language";
         private static final String EQUIPMENT_P = "equipment";
+        private static final String IMAGE = "image";
 
         private Context mContext;
 
@@ -91,14 +100,21 @@ public class FragmentTwo extends Fragment {
         @Override
         protected List<Exercise> doInBackground(Void... params) {
             URL queryURL;
-            JSONObject result;
+            JSONObject[] result=new JSONObject[2];
 
-            //Construir URI con los campos definidos arriba
+            //Construir URI de EJERCICIOS con los campos definidos arriba
             queryURL = NetworkUtils.buildURL(BASE_URL,
-                    new String[]{JSON_SEG,JSON_SEG2,JSON_SEG3},
+                    new String[]{JSON_SEG,JSON_SEG2,JSON_SEG_EX},
                     new Pair(LANGUAGE_P, "2"),
                     new Pair(EQUIPMENT_P, "7"));
-            result = NetworkUtils.getJSONResponse(queryURL);
+            result[0] = NetworkUtils.getJSONResponse(queryURL);
+
+
+            //Construir URI de IMAGENES
+            queryURL = NetworkUtils.buildURL(BASE_URL,
+                    new String[]{JSON_SEG,JSON_SEG2,JSON_SEG_IMG});
+            result[1] = NetworkUtils.getJSONResponse(queryURL);
+
             if(result != null)
                 return jsonToList(result);
 
@@ -107,6 +123,13 @@ public class FragmentTwo extends Fragment {
 
         @Override
         protected void onPostExecute(List<Exercise> result) {
+            ExerciseCRUD crud = ExerciseCRUD.getInstance(getContext());
+            /*List<Exercise> prueba=crud.getAll();*/
+            for (int i = 0; i < result.size(); i++){
+                Exercise item=result.get(i);
+                long id = crud.insert(item);
+                item.setId(id);
+            }
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
             exerciseList = new ExerciseList(result);
@@ -117,21 +140,21 @@ public class FragmentTwo extends Fragment {
 
     }
 
-    public List<Exercise> jsonToList(JSONObject responseObject) {
+    public List<Exercise> jsonToList(JSONObject[] responseObject) {
         List<Exercise> result = new ArrayList<>();
 
         try {
 
 
-            JSONArray exercises = responseObject
-                    .getJSONArray(EXERCISE_ID_TAG);
+            JSONArray exercises = responseObject[0]
+                    .getJSONArray(EXERCISE_TAG);
             //TODO obtener todos los ejercicios y construir los objetos
             for (int idx = 0; idx < exercises.length(); idx++) {
 
                 // Get single exercise data - a Map
                 JSONObject exercise = (JSONObject) exercises.get(idx);
 
-                Exercise exerciseObj= new Exercise(exercise.get(NAME_TAG).toString(),exercise.get(DESCRIPTION_TAG).toString(),"","");
+                Exercise exerciseObj= new Exercise(idx,exercise.get(NAME_TAG).toString(),exercise.get(DESCRIPTION_TAG).toString(),"");
 
                 result.add(exerciseObj);
 

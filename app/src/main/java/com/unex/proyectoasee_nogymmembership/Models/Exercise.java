@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Exercise implements Serializable {
 
+    private long id;
     private String name;
     private String description;
     private String category;
@@ -17,12 +18,18 @@ public class Exercise implements Serializable {
     public final static String MUSCLES = "muscles";
     public final static String IMAGEURI = "imageuri";
 
-    public Exercise(String name, String description, String muscles, String imageuri){
+
+
+    public Exercise(long id,String name, String description, String imageuri){
+        this.id=id;
         this.name=name;
         this.description=description;
-        this.muscles=muscles;
         this.imageURI=imageuri;
     }
+
+    public long getId() { return id; }
+
+    public void setId(long id) { this.id = id; }
 
     public String getName() {
         return name;

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.unex.proyectoasee_nogymmembership">
-    <uses-permission android:name="android.permission.INTERNET" >
-    </uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,14 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Networking.NetworkingAndroidHttpClientJSONActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
         <activity android:name=".Adds.AddRoutineActivity" />
-        <activity android:name=".AppBarUtils.UserPreferences" />
-        <activity android:name=".ShowRoutine" />
+        <activity
+            android:name=".Adds.ExerciseDescActivity"
+            android:label="@string/title_activity_exercise_desc"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

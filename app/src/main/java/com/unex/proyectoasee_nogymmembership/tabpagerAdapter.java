@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class tabpagerAdapter extends FragmentStatePagerAdapter {
 
     //TODO obtener los títulos de cada tabItem desde strings.xml
-    String[] tabarray = new String[]{"                 ROUTINES                 ","                 EXERCISES                "};
+    String[] tabarray = new String[]{"ROUTINES LIST","EXERCISES LIST"};
     Integer tabnumber = 2;
 
     public tabpagerAdapter(FragmentManager fm) {
