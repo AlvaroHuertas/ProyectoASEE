@@ -76,7 +76,7 @@ public class FragmentTwo extends Fragment {
         return rootView;
     }
 
-    private class HttpGetTask extends AsyncTask<Void, Void, List<Exercise>> {
+    private class HttpGetTask extends AsyncTask<Void, Void, ExerciseList> {
         private static final String BASE_URL ="wger.de";
         private static final String JSON_SEG = "api";
         private static final String JSON_SEG2 ="v2";
@@ -98,7 +98,7 @@ public class FragmentTwo extends Fragment {
         }
 
         @Override
-        protected List<Exercise> doInBackground(Void... params) {
+        protected ExerciseList doInBackground(Void... params) {
             URL queryURL;
             JSONObject[] result=new JSONObject[2];
 
@@ -122,17 +122,21 @@ public class FragmentTwo extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<Exercise> result) {
+        protected void onPostExecute(ExerciseList result) {
+            ExerciseList exerciseList=result;
+            List<Exercise> aux=exerciseList.getElements();
             ExerciseCRUD crud = ExerciseCRUD.getInstance(getContext());
             /*List<Exercise> prueba=crud.getAll();*/
-            for (int i = 0; i < result.size(); i++){
-                Exercise item=result.get(i);
+            crud.deleteAll();
+
+            for (int i = 0; i < aux.size(); i++){
+                Exercise item=aux.get(i);
                 long id = crud.insert(item);
                 item.setId(id);
             }
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
-            exerciseList = new ExerciseList(result);
+
             mAdapter= new ExerciseAdapter(mContext,exerciseList);
             mExercisesRecycler.setAdapter(mAdapter);
 
@@ -140,8 +144,9 @@ public class FragmentTwo extends Fragment {
 
     }
 
-    public List<Exercise> jsonToList(JSONObject[] responseObject) {
-        List<Exercise> result = new ArrayList<>();
+    public ExerciseList jsonToList(JSONObject[] responseObject) {
+        List<Exercise> exercisesList = new ArrayList<>();
+        ExerciseList result=new ExerciseList();
 
         try {
 
@@ -156,8 +161,8 @@ public class FragmentTwo extends Fragment {
 
                 Exercise exerciseObj= new Exercise(idx,exercise.get(NAME_TAG).toString(),exercise.get(DESCRIPTION_TAG).toString(),"");
 
-                result.add(exerciseObj);
-
+                exercisesList.add(exerciseObj);
+                result.setElements(exercisesList);
                 // Summarize exercise data as a string and add it to
                 // result
                 /*result.add(NAME_TAG + ":"

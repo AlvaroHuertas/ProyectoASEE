@@ -7,5 +7,21 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Adds.ExerciseDescActivity"
     tools:showIn="@layout/exercise_desc">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/exercise_name_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50px"/>
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/exercise_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30px"/>
+    </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>

@@ -67,6 +67,41 @@ public class ExerciseCRUD {
         return items;
     }
 
+    public Exercise getExercise(int id){
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String[] projection = {
+                DBContract.Exercise._ID,
+                DBContract.Exercise.COLUMN_NAME_NAME,
+                DBContract.Exercise.COLUMN_NAME_DESC,
+                DBContract.Exercise.COLUMN_NAME_IMAGE
+        };
+
+        String selection = null;
+        String[] selectionArgs = null;
+
+        String sortOrder = null;
+
+        Cursor cursor = db.query(       //Patrçon objectQuery
+                DBContract.Exercise.TABLE_NAME,           // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+
+        ArrayList<Exercise> items = new ArrayList<>();
+        cursor.moveToFirst();
+        cursor.move(id);
+        Exercise item=getExerciseFromCursor(cursor);
+        cursor.close();
+        return item;
+    }
+
+
     public long insert(Exercise item){
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
