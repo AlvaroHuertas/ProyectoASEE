@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder>{
-    Context context;
+    private Context context;
     private ExerciseList exerciseList;
+    private final OnItemClickListener listener;
 
 
     public interface OnItemClickListener {
@@ -44,7 +45,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         this.listener = listener;
     }
 
-    private final OnItemClickListener listener;
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
@@ -67,14 +68,12 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // - Attach Listener to FloatingActionButton. Implement onClick()
                 Intent intent = new Intent(context, ExerciseDescActivity.class);
                 intent.putExtra("id_exercise",i);
                 context.startActivity(intent);
 
             }
         });
-        /*viewHolder.description.setText(exerciseList.get(i).getDescription());*/
     }
 
     @Override

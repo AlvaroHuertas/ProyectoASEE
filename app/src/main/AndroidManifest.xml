@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.unex.proyectoasee_nogymmembership">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -26,6 +26,10 @@
         <activity
             android:name=".Adds.ExerciseDescActivity"
             android:label="@string/title_activity_exercise_desc"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Adds.AddExerciseToRoutine"
+            android:label="@string/title_activity_add_exercise_to_routine"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
