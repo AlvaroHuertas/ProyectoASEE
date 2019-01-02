@@ -26,6 +26,11 @@ public class Exercise implements Serializable {
         this.description=description;
         this.imageURI=imageuri;
     }
+    public Exercise(String name, String description, String muscles, String imageuri){
+        this.name=name;
+        this.description=description;
+       this.muscles = muscles;
+    }
 
     public long getId() { return id; }
 

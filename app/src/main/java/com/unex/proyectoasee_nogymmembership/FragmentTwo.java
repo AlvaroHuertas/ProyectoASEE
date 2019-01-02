@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
@@ -129,15 +130,24 @@ public class FragmentTwo extends Fragment {
             /*List<Exercise> prueba=crud.getAll();*/
             crud.deleteAll();
 
-            for (int i = 0; i < aux.size(); i++){
-                Exercise item=aux.get(i);
-                long id = crud.insert(item);
-                item.setId(id);
+            if(aux != null) {
+
+                for (int i = 0; i < aux.size(); i++) {
+                    Exercise item = aux.get(i);
+                    long id = crud.insert(item);
+                    item.setId(id);
+                }
             }
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
 
-            mAdapter= new ExerciseAdapter(mContext,exerciseList);
+            mAdapter= new ExerciseAdapter(mContext, exerciseList, new ExerciseAdapter.OnLongItemClickListener() {
+                @Override
+                public void onItemLongClick(Exercise item) {
+                    Toast t = Toast.makeText(getContext(), "Probando onLongClick", Toast.LENGTH_SHORT);
+                    t.show();
+                }
+            });
             mExercisesRecycler.setAdapter(mAdapter);
 
         }
@@ -150,7 +160,7 @@ public class FragmentTwo extends Fragment {
 
         try {
 
-
+        if(responseObject[0] != null) {
             JSONArray exercises = responseObject[0]
                     .getJSONArray(EXERCISE_TAG);
             //TODO obtener todos los ejercicios y construir los objetos
@@ -159,7 +169,7 @@ public class FragmentTwo extends Fragment {
                 // Get single exercise data - a Map
                 JSONObject exercise = (JSONObject) exercises.get(idx);
 
-                Exercise exerciseObj= new Exercise(idx,exercise.get(NAME_TAG).toString(),exercise.get(DESCRIPTION_TAG).toString(),"");
+                Exercise exerciseObj = new Exercise(idx, exercise.get(NAME_TAG).toString(), exercise.get(DESCRIPTION_TAG).toString(), "");
 
                 exercisesList.add(exerciseObj);
                 result.setElements(exercisesList);
@@ -170,6 +180,7 @@ public class FragmentTwo extends Fragment {
                         + DESCRIPTION_TAG + ":"
                         + exercise.getString(DESCRIPTION_TAG));*/
             }
+        }
 
         } catch (JSONException e) {
             e.printStackTrace();

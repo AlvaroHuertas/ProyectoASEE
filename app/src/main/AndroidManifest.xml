@@ -27,6 +27,8 @@
             android:name=".Adds.ExerciseDescActivity"
             android:label="@string/title_activity_exercise_desc"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ShowRoutine" />
+        <activity android:name=".AppBarUtils.UserPreferences" />
     </application>
 
 </manifest>
