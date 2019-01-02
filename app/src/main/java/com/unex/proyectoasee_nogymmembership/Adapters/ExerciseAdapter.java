@@ -20,23 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder>{
-    Context context;
+    private Context context;
     private ExerciseList exerciseList;
+    private final OnItemClickListener listener;
 
 
     public interface OnItemClickListener {
         void onItemClick(Exercise item);     //Type of the element to be returned
     }
 
-    public interface OnLongItemClickListener {
-        void onItemLongClick(Exercise item);     //Type of the element to be returned
-    }
-
-    public ExerciseAdapter(Context context, ExerciseList exerciseList, OnLongItemClickListener listener) {
-            this.context = context;
+    public ExerciseAdapter(Context context, ExerciseList exerciseList) {
+        this.context = context;
         this.exerciseList = exerciseList;
-        this.longListener = listener;
-
+        this.listener = null;
     }
 
     public ExerciseAdapter(OnItemClickListener listener) {
@@ -49,8 +45,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         this.listener = listener;
     }
 
-    private OnItemClickListener listener;
-    private OnLongItemClickListener longListener;
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
@@ -70,18 +65,15 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         List<Exercise> exercisesAux = new ArrayList<>();
         exercisesAux=exerciseList.getElements();
         viewHolder.name.setText(exercisesAux.get(i).getName());
-
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // - Attach Listener to FloatingActionButton. Implement onClick()
                 Intent intent = new Intent(context, ExerciseDescActivity.class);
                 intent.putExtra("id_exercise",i);
                 context.startActivity(intent);
 
             }
         });
-        /*viewHolder.description.setText(exerciseList.get(i).getDescription());*/
     }
 
     @Override

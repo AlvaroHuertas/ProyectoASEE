@@ -43,4 +43,5 @@
     <string name="defaultWeight">70</string>
     <string name="defaultHeight">175</string>
     <string name="title_activity_exercise_desc">ExerciseDescActivity</string>
+    <string name="title_activity_add_exercise_to_routine">AddExerciseToRoutine</string>
 </resources>

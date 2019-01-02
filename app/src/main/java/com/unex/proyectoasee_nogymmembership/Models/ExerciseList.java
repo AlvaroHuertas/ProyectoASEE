@@ -8,9 +8,7 @@ public class ExerciseList implements Serializable {
 
     protected List<Exercise> elements;
 
-    public ExerciseList(){
-
-    }
+    public ExerciseList(){ elements = new ArrayList<>();}
 
     public ExerciseList(List<Exercise> e){
         elements = e;

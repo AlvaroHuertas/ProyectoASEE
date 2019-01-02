@@ -36,6 +36,14 @@ public class RoutineList {
         elements.get(position).setStatus(item.getStatus());
     }
 
+    public List<Routine> getElements() {
+        return elements;
+    }
+
+    public void setElements(List<Routine> elements) {
+        this.elements = elements;
+    }
+
     public Routine get(int position){
         return elements.get(position);
     }

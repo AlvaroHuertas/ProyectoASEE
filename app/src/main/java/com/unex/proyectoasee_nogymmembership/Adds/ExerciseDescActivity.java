@@ -7,13 +7,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.unex.proyectoasee_nogymmembership.Adapters.RoutineListAdapter;
 import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
+import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.R;
 
-public class ExerciseDescActivity extends AppCompatActivity {
+public class ExerciseDescActivity extends AppCompatActivity{
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +26,10 @@ public class ExerciseDescActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        int id=intent.getIntExtra("id_exercise",-1);
+        id=intent.getIntExtra("id_exercise",-1);
 
-        ExerciseCRUD crud = ExerciseCRUD.getInstance(getApplicationContext());
-        Exercise exercise=crud.getExercise(id);
+        ExerciseCRUD exerciseCRUD = ExerciseCRUD.getInstance(getApplicationContext());
+        Exercise exercise=exerciseCRUD.getExercise(id);
 
 
         TextView name = findViewById(R.id.exercise_name_desc);
@@ -35,5 +39,22 @@ public class ExerciseDescActivity extends AppCompatActivity {
         description.setText(exercise.getDescription());
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Button button = findViewById(R.id.exercise_button);
+        button.setOnClickListener(addToRoutine);
+    }
+
+    View.OnClickListener addToRoutine =new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), AddExerciseToRoutine.class);
+            intent.putExtra("id_exercise",id);
+            startActivity(intent);
+        }
+    };
+
 
 }

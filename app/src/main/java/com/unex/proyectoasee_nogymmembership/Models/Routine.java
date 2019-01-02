@@ -1,26 +1,38 @@
 package com.unex.proyectoasee_nogymmembership.Models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Intent;
 
+import com.unex.proyectoasee_nogymmembership.RoomDB.StatusConverter;
+
 import java.io.Serializable;
-import java.util.List;
 
-
+@Entity(tableName = "routine")
 public class Routine implements Serializable {
 
     public enum Status {
         NOTDONE, DONE
     };
 
+    @PrimaryKey(autoGenerate = true)
     private long id;
     private String name;
     private String type;
+    @TypeConverters(StatusConverter.class)
     private Status status;
+    @Ignore
     private ExerciseList exercises;
 
+    @Ignore
     public final static String ID = "ID";
+    @Ignore
     public final static String NAME = "name";
+    @Ignore
     public final static String TYPE = "type";
+    @Ignore
     public final static String STATUS = "status";
 
 
@@ -32,6 +44,7 @@ public class Routine implements Serializable {
         this.exercises = new ExerciseList();
     }
 
+    @Ignore
     public Routine(Intent intent) {
         id = intent.getLongExtra(Routine.ID, 0);
         name = intent.getStringExtra(Routine.NAME);
@@ -74,9 +87,7 @@ public class Routine implements Serializable {
         this.id = id;
     }
 
-
-
-
+    @Ignore
     public static void packageIntent(Intent intent, String name, String type) {
 
         intent.putExtra(Routine.NAME, name);
