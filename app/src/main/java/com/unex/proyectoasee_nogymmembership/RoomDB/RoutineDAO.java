@@ -1,6 +1,7 @@
 package com.unex.proyectoasee_nogymmembership.RoomDB;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
@@ -20,6 +21,9 @@ public interface RoutineDAO {
 
     @Update
     public void updateStatus(Routine item);
+
+    @Delete
+    public void deleteRoutines(Routine... routines);
 
     @Query("SELECT * FROM routine WHERE id = :id")
     public Routine getRoutine(int id);

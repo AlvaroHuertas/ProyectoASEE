@@ -87,18 +87,7 @@ public class ShowRoutine extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-        // Load saved ToDoItems, if necessary
-        Toast t = Toast.makeText(ShowRoutine.this, "OnResume de Show Routine", Toast.LENGTH_SHORT);
-        t.show();
-
         new AsyncLoadRoutine().execute(routineItem.getId());
-
-
-        if (mAdapter.getItemCount() == 0){
-            //loadItems();
-        }
-
     }
 
     class AsyncLoadRoutine extends AsyncTask<Long,Void,Routine> {

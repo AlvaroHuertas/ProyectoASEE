@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
 import com.unex.proyectoasee_nogymmembership.R;
+import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
 
@@ -112,8 +114,8 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
 
     public void delete(Routine item, int position){
         routineList.deleteItem(position);
-        RoutineCRUD crud = RoutineCRUD.getInstance(mContext);
-        crud.deleteItem(item.getId());
+
+         new AsyncDelete().execute(item);
         notifyDataSetChanged();
     }
 
@@ -178,6 +180,17 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
                     listener.onItemClick(routine);
                 }
             });
+        }
+
+    }
+
+    class AsyncDelete extends AsyncTask<Routine, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Routine... routines) {
+            AppDataBase appDB = AppDataBase.getDataBase(mContext);
+            appDB.routineDAO().deleteRoutines(routines[0]);
+            return null;
         }
 
     }
