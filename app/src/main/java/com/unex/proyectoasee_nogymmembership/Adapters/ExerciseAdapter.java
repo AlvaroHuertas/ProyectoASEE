@@ -45,7 +45,11 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         this.listener = listener;
     }
 
-
+    public void load(ExerciseList items) {
+        exerciseList.clear();
+        exerciseList = items;
+        notifyDataSetChanged();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
@@ -69,7 +73,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ExerciseDescActivity.class);
-                intent.putExtra("id_exercise",i);
+                intent.putExtra("id_exercise",i+1);
+                intent.putExtra("name_exercise",exerciseList.getElements().get(i).getName());
+                intent.putExtra("description_exercise",exerciseList.getElements().get(i).getDescription());
                 context.startActivity(intent);
 
             }

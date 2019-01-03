@@ -18,6 +18,8 @@ import com.unex.proyectoasee_nogymmembership.R;
 
 public class ExerciseDescActivity extends AppCompatActivity{
     private int id;
+    private String name;
+    private String description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +29,14 @@ public class ExerciseDescActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
         id=intent.getIntExtra("id_exercise",-1);
-
-        ExerciseCRUD exerciseCRUD = ExerciseCRUD.getInstance(getApplicationContext());
-        Exercise exercise=exerciseCRUD.getExercise(id);
-
+        name=intent.getStringExtra("name_exercise");
+        description=intent.getStringExtra("description_exercise");
 
         TextView name = findViewById(R.id.exercise_name_desc);
         TextView description= findViewById(R.id.exercise_description);
 
-        name.setText(exercise.getName());
-        description.setText(exercise.getDescription());
+        name.setText(this.name);
+        description.setText(this.description);
 
     }
 
@@ -52,6 +52,8 @@ public class ExerciseDescActivity extends AppCompatActivity{
         public void onClick(View v) {
             Intent intent = new Intent(getApplicationContext(), AddExerciseToRoutine.class);
             intent.putExtra("id_exercise",id);
+            intent.putExtra("name_exercise",name);
+            intent.putExtra("description_exercise",description);
             startActivity(intent);
         }
     };

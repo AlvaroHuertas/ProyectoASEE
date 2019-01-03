@@ -3,6 +3,7 @@ package com.unex.proyectoasee_nogymmembership.RoomDB;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
@@ -20,4 +21,10 @@ public interface ExerciseDAO {
 
     @Query("DELETE FROM exercise")
     public void deleteAll();
+
+    @Query("SELECT * FROM exercise WHERE exerciseId = :id")
+    Exercise getExercise(int id);
+
+    @Update
+    public int updateRoutine(Exercise item);
 }
