@@ -2,6 +2,7 @@ package com.unex.proyectoasee_nogymmembership;
 
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.unex.proyectoasee_nogymmembership.Adds.AddRoutineActivity;
 import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
+import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
 
@@ -45,10 +47,7 @@ public class FragmentOne extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_fragment_one, container, false);
-
-
         return rootView;
     }
 
@@ -101,17 +100,9 @@ public class FragmentOne extends Fragment {
         // and then add it to the adapter
         if (requestCode == ADD_ROUTINE_ITEM_REQUEST){
             if (resultCode == RESULT_OK){
-                Routine item = new Routine(data);
+                Routine routine = new Routine(data);
 
-                //insert into DB
-                RoutineCRUD crud = RoutineCRUD.getInstance(getContext());
-                long id = crud.insert(item);
-
-                //update item ID
-                item.setId(id);
-
-                //insert into adapter list
-                mAdapter.add(item);
+                new AsyncInsert().execute(routine);
             }
         }
 
@@ -137,8 +128,7 @@ public class FragmentOne extends Fragment {
 
     @Override
     public void onDestroy() {
-        RoutineCRUD crud = RoutineCRUD.getInstance(getContext());
-        crud.close();
+
         super.onDestroy();
     }
 
@@ -146,10 +136,43 @@ public class FragmentOne extends Fragment {
 
     // Load stored Routines
     private void loadItems() {
-        RoutineCRUD crud = RoutineCRUD.getInstance(getContext());
-        List<Routine> items = crud.getAll();
-        RoutineList routineItems = new RoutineList(items);
-        mAdapter.load(routineItems);
+     new AsyncLoad().execute();
+    }
+
+    class AsyncLoad extends AsyncTask<Void, Void, List<Routine>>{
+        @Override
+        protected List<Routine> doInBackground(Void... voids) {
+            AppDataBase appDB = AppDataBase.getDataBase(getContext());
+            List<Routine> items = appDB.routineDAO().getAll();
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(List<Routine> items){
+            super.onPostExecute(items);
+            RoutineList r = new RoutineList(items);
+            mAdapter.load(r);
+        }
+
+    }
+
+    class AsyncInsert extends AsyncTask<Routine, Void, Routine>{
+
+        @Override
+        protected Routine doInBackground(Routine... routines) {
+            AppDataBase appDB = AppDataBase.getDataBase(getContext());
+            long id = appDB.routineDAO().insert(routines[0]);
+
+            routines[0].setId(id);
+
+            return routines[0];
+        }
+
+        @Override
+        protected void onPostExecute(Routine routine){
+            super.onPostExecute(routine);
+            mAdapter.add(routine);
+        }
     }
 
 }
