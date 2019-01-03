@@ -19,7 +19,10 @@ public interface RoutineDAO {
     public long insert(Routine item);
 
     @Update
-    public int updateStatus(Routine item);
+    public void updateStatus(Routine item);
+
+    @Query("SELECT * FROM routine WHERE id = :id")
+    public Routine getRoutine(int id);
 
     @Query("DELETE FROM routine")
     public void deleteAll();

@@ -59,6 +59,11 @@
             tools:ignore="InnerclassSeparator,UnusedAttribute"
             android:parentActivityName=".MainActivity">
         </activity>
+
+        <activity
+            android:name=".ModRoutineActivity"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
     </application>
 
 </manifest>

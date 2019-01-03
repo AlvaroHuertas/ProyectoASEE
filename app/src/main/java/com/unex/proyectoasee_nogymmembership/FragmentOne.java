@@ -112,9 +112,7 @@ public class FragmentOne extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Load saved ToDoItems, if necessary
 
-        if (mAdapter.getItemCount() == 0)
             loadItems();
     }
 
