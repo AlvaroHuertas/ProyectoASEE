@@ -13,7 +13,7 @@ import java.util.List;
 public interface ExerciseDAO {
 
     @Query("SELECT * FROM exercise")
-    public List<Routine> getAll();
+    public List<Exercise> getAll();
 
     @Insert
     public long insert(Exercise item);

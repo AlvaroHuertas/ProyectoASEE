@@ -2,26 +2,18 @@ package com.unex.proyectoasee_nogymmembership;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
-import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
-import com.unex.proyectoasee_nogymmembership.Adds.ExerciseDescActivity;
 import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
@@ -135,19 +127,13 @@ public class FragmentTwo extends Fragment {
                 for (int i = 0; i < aux.size(); i++) {
                     Exercise item = aux.get(i);
                     long id = crud.insert(item);
-                    item.setId(id);
+                    item.setExerciseId(id);
                 }
             }
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
             mExercisesRecycler.setLayoutManager(lay_Manager);
 
-            mAdapter= new ExerciseAdapter(mContext, exerciseList, new ExerciseAdapter.OnLongItemClickListener() {
-                @Override
-                public void onItemLongClick(Exercise item) {
-                    Toast t = Toast.makeText(getContext(), "Probando onLongClick", Toast.LENGTH_SHORT);
-                    t.show();
-                }
-            });
+            mAdapter= new ExerciseAdapter(mContext, exerciseList);
             mExercisesRecycler.setAdapter(mAdapter);
 
         }

@@ -39,14 +39,19 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
         this.listener = listener;
     }
 
-    public RoutineListAdapter(Context context, RoutineList routineList,CallBack callback){
+    public RoutineListAdapter(Context context,CallBack callback){
         this.context = context;
-        this.routineList = routineList;
         this.listener = null;
         this.callback=callback;
     }
     public interface CallBack{
         void onItemClicked(int position);
+    }
+
+    public void load(RoutineList items) {
+        routineList.clear();
+        routineList = items;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

@@ -23,6 +23,7 @@ public class Routine implements Serializable {
     private String type;
     @TypeConverters(StatusConverter.class)
     private Status status;
+
     @Ignore
     private ExerciseList exercises;
 
@@ -35,13 +36,11 @@ public class Routine implements Serializable {
     @Ignore
     public final static String STATUS = "status";
 
-
-    public Routine(long id, String name, String type, String status) {
+    public Routine(long id, String name, String type, Status status) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.status = Status.valueOf(status);
-        this.exercises = new ExerciseList();
+        this.status = status;
     }
 
     @Ignore

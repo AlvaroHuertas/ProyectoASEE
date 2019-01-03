@@ -1,6 +1,7 @@
 package com.unex.proyectoasee_nogymmembership.Adds;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,15 +14,17 @@ import android.view.View;
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineListAdapter;
 import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
+import com.unex.proyectoasee_nogymmembership.FragmentOne;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
 import com.unex.proyectoasee_nogymmembership.R;
+import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
 
 public class AddExerciseToRoutine extends AppCompatActivity implements RoutineListAdapter.CallBack{
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RoutineListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -44,12 +47,17 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        RoutineList routineList=new RoutineList();
+        mAdapter = new RoutineListAdapter(this,AddExerciseToRoutine.this);
+       /* RoutineList routineList=new RoutineList();
         List<Routine> aux=routineList.getElements();
         RoutineCRUD crud = RoutineCRUD.getInstance(getApplicationContext());
         aux=crud.getAll();
         routineList.setElements(aux);
         mAdapter = new RoutineListAdapter(this,routineList,AddExerciseToRoutine.this);
+        */
+
+        new AsyncLoad().execute();
+
         mRecyclerView.setAdapter(mAdapter);
 
     }
@@ -57,6 +65,23 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
     @Override
     public void onItemClicked(int position) {
         RoutineCRUD routineCRUD = RoutineCRUD.getInstance(getApplicationContext());
+
+    }
+
+    class AsyncLoad extends AsyncTask<Void, Void, List<Routine>> {
+        @Override
+        protected List<Routine> doInBackground(Void... voids) {
+            AppDataBase appDB = AppDataBase.getDataBase(AddExerciseToRoutine.this);
+            List<Routine> items = appDB.routineDAO().getAll();
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(List<Routine> items){
+            super.onPostExecute(items);
+            RoutineList r = new RoutineList(items);
+            mAdapter.load(r);
+        }
 
     }
 }

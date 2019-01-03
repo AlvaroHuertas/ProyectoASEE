@@ -110,7 +110,7 @@ public class ExerciseCRUD {
         ContentValues values = new ContentValues();
         values.put(DBContract.Exercise.COLUMN_NAME_NAME, item.getName());
         values.put(DBContract.Exercise.COLUMN_NAME_DESC, item.getDescription());
-        values.put(DBContract.Exercise.COLUMN_NAME_IMAGE, item.getURI());
+      //  values.put(DBContract.Exercise.COLUMN_NAME_IMAGE, item.getURI());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(DBContract.Exercise.TABLE_NAME, null, values);

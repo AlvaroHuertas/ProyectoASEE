@@ -129,13 +129,14 @@ public class RoutineCRUD {
 
     private Routine getRoutineFromCursor(Cursor cursor) {
 
-        long ID = cursor.getInt(cursor.getColumnIndex(DBContract.Routine._ID));
+   /*     long ID = cursor.getInt(cursor.getColumnIndex(DBContract.Routine._ID));
         String name = cursor.getString(cursor.getColumnIndex(DBContract.Routine.COLUMN_NAME_NAME));
         String type = cursor.getString(cursor.getColumnIndex(DBContract.Routine.COLUMN_NAME_TYPE));
         String status = cursor.getString(cursor.getColumnIndex(DBContract.Routine.COLUMN_NAME_STATUS));
 
         Routine item = new Routine(ID, name, type, status);
-    return item;
+        */
+    return null;
     }
 
     public void close(){

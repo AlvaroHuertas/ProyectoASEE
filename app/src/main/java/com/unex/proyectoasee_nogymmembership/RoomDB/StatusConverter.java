@@ -11,6 +11,7 @@ public class StatusConverter {
         return Routine.Status.valueOf(status);
     }
 
+    @TypeConverter
     public static String toString(Routine.Status status){
         return status.name();
     }

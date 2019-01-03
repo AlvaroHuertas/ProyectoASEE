@@ -1,26 +1,30 @@
 package com.unex.proyectoasee_nogymmembership.Models;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "exercise")
+@Entity(tableName = "exercise", foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "exerciseId"))
 public class Exercise implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private long exerciseId;
     private String name;
     private String description;
+    private long routineId;
+
+
     @Ignore
     private String category;
     @Ignore
     private String muscles;
-    private String imageURI;
+    // private String imageURI;
 
     @Ignore
-    public final static String ID = "ID";
+    public final static String ID = "exerciseId";
     @Ignore
     public final static String NAME = "name";
     @Ignore
@@ -32,38 +36,69 @@ public class Exercise implements Serializable {
     @Ignore
     public final static String IMAGEURI = "imageuri";
 
-    public Exercise(long id,String name, String description, String imageuri){
-        this.id=id;
-        this.name=name;
-        this.description=description;
-        this.imageURI=imageuri;
-    }
-    public Exercise(String name, String description, String muscles, String imageuri){
-        this.name=name;
-        this.description=description;
-       this.muscles = muscles;
+    @Ignore
+    public Exercise(long exerciseId, String name, String description, String imageuri) {
+        this.exerciseId = exerciseId;
+        this.name = name;
+        this.description = description;
+        // this.imageURI=imageuri;
     }
 
-    public long getId() { return id; }
+    @Ignore
+    public Exercise(String name, String description, String muscles, String imageuri) {
+        this.name = name;
+        this.description = description;
+        this.muscles = muscles;
+    }
 
-    public void setId(long id) { this.id = id; }
+    public Exercise(long exerciseId, String name, String description, long routineId) {
+        this.exerciseId = exerciseId;
+        this.name = name;
+        this.description = description;
+        this.routineId = routineId;
+    }
+
+    public long getExerciseId() {
+        return exerciseId;
+    }
+
+    public void setExerciseId(long exerciseId) {
+        this.exerciseId = exerciseId;
+    }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getMuscles() {
         return muscles;
     }
 
-    public String getURI() {
-        return imageURI;
+    public long getRoutineId() {
+        return routineId;
     }
 
+    public void setRoutineId(long routineId) {
+        this.routineId = routineId;
+    }
+
+/*    public String getURI() {
+        return imageURI;
+    }
+    */
 
 
 }
