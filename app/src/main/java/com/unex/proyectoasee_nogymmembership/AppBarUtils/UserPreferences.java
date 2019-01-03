@@ -2,6 +2,7 @@ package com.unex.proyectoasee_nogymmembership.AppBarUtils;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,12 @@ public class UserPreferences extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userpreferences);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
 
         final Button doneButton = (Button) findViewById(R.id.buttonDone);
         doneButton.setOnClickListener(new View.OnClickListener() {

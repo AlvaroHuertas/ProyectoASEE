@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.unex.proyectoasee_nogymmembership">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,7 +12,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -22,17 +25,40 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Adds.AddRoutineActivity" />
+
+        <activity
+            android:name=".Adds.AddRoutineActivity"
+            tools:ignore="InnerclassSeparator,UnusedAttribute"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
         <activity
             android:name=".Adds.ExerciseDescActivity"
             android:label="@string/title_activity_exercise_desc"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="InnerclassSeparator,UnusedAttribute"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
         <activity
             android:name=".Adds.AddExerciseToRoutine"
             android:label="@string/title_activity_add_exercise_to_routine"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ShowRoutine" />
-        <activity android:name=".AppBarUtils.UserPreferences" />
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="InnerclassSeparator,UnusedAttribute"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
+        <activity
+            android:name=".ShowRoutine"
+            android:parentActivityName=".MainActivity"
+            tools:ignore="UnusedAttribute">
+        </activity>
+
+        <activity
+            android:name=".AppBarUtils.UserPreferences"
+            tools:ignore="InnerclassSeparator,UnusedAttribute"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

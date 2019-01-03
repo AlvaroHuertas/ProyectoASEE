@@ -14,19 +14,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.unex.proyectoasee_nogymmembership.AppBarUtils.SettingsFragment;
 import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nav_drawer);
+        setContentView(R.layout.main_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,9 +47,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
 
         //Cargar las preferencias con los valores por defecto
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
@@ -64,11 +59,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         username=sharedPref.getString(SettingsFragment.KEY_PREF_USERNAME,"");
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View header = navigationView.getHeaderView(0);
 
-        TextView textView = (TextView) header.findViewById(R.id.textView);
-        textView.setText(username);
     }
 
 
@@ -91,50 +82,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            //Mostrar el SettingsFragment como contenido principal
-            getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content,new SettingsFragment())
-                    .addToBackStack(null)
-                    .commit();
-            return true;
-
-        }else if(id == R.id.action_preferences){
+        if (id == R.id.action_preferences) {
             Intent intent = new Intent(getApplicationContext(), UserPreferences.class);
             startActivity(intent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 }

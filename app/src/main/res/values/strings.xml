@@ -27,6 +27,12 @@
     <string name="username">Change User Name</string>
     <string name="string_name">Name: </string>
     <string name="string_type">Type: </string>
+    <string-array name="routine_types">
+        <item>Pull</item>
+        <item>Push</item>
+        <item>Legs</item>
+        <item>Core</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="One_hello_blank_fragment">One: Routines List</string>
@@ -44,4 +50,5 @@
     <string name="defaultHeight">175</string>
     <string name="title_activity_exercise_desc">ExerciseDescActivity</string>
     <string name="title_activity_add_exercise_to_routine">AddExerciseToRoutine</string>
+    <string name="routine_prompt">Choose a type</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.unex.proyectoasee_nogymmembership.AppBarUtils;
 
+import android.support.v7.widget.Toolbar;
 import android.util.*;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
 
         //Establece el color de fondo de la pantalla de preferencias
         view.setBackgroundColor(getResources().getColor(android.R.color.white));

@@ -12,7 +12,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
 
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/routine_name_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/NameLabel"
@@ -35,19 +35,24 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="1dp"></TextView>
 
-    <EditText
-        android:id="@+id/type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/NameLabel"
+    <Spinner
+        android:id="@+id/routine_type_add"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="115dp"
-        android:ems="10"
-        android:hint="@string/string_enter_type"
-        android:inputType="textShortMessage"></EditText>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginLeft="63dp"
+        android:layout_marginTop="97dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginRight="27dp"
+        android:layout_marginBottom="379dp"
+        android:entries="@array/routine_types"
+        android:prompt="@string/routine_prompt" />
 
     <Button
         android:id="@+id/cancelButton"

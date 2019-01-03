@@ -2,10 +2,13 @@ package com.unex.proyectoasee_nogymmembership.Adds;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.R;
@@ -14,14 +17,20 @@ import com.unex.proyectoasee_nogymmembership.R;
 public class AddRoutineActivity extends AppCompatActivity {
 
     private EditText mNameText;
-    private EditText mType;
+    private Spinner mType;
     @Override
     public void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_routine);
 
-        mNameText = (EditText) findViewById(R.id.name);
-        mType = (EditText) findViewById(R.id.type);
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        mNameText = (EditText) findViewById(R.id.routine_name_add);
+        mType = (Spinner) findViewById(R.id.routine_type_add);
 
 
         final Button cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -44,7 +53,7 @@ public class AddRoutineActivity extends AppCompatActivity {
 
                 //- Reset data fields to default values
                 mNameText.setText("");
-                mType.setText("");
+                mType.setSelection(0);
             }
         });
 
@@ -56,7 +65,7 @@ public class AddRoutineActivity extends AppCompatActivity {
 
                 String nameString = mNameText.getText().toString();
 
-                String typeString = mType.getText().toString();
+                String typeString = mType.getSelectedItem().toString();
 
                 
 
