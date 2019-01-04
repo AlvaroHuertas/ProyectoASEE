@@ -43,6 +43,7 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
         this.context = context;
         this.listener = null;
         this.callback=callback;
+        this.routineList=new RoutineList();
     }
     public interface CallBack{
         void onItemClicked(int position);

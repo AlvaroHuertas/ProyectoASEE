@@ -2,6 +2,7 @@ package com.unex.proyectoasee_nogymmembership;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -10,16 +11,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.Adds.AddRoutineActivity;
 import com.unex.proyectoasee_nogymmembership.DBUtils.DBContract;
+import com.unex.proyectoasee_nogymmembership.Models.Exercise;
+import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
+import java.util.List;
+import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
+import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShowRoutine extends AppCompatActivity {
@@ -30,7 +39,7 @@ public class ShowRoutine extends AppCompatActivity {
     private TextView routineTypeTextView;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ExerciseAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public static String INTENT_OBJECT_EXTRA = "Routine";
@@ -79,6 +88,7 @@ public class ShowRoutine extends AppCompatActivity {
 
         mAdapter = new ExerciseAdapter(null);
 
+        new AsyncLoad().execute();
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -103,6 +113,34 @@ public class ShowRoutine extends AppCompatActivity {
             super.onPostExecute(item);
             routineNameTextView.setText(item.getName());
             routineTypeTextView.setText(item.getType());
+        }
+
+    }
+
+    class AsyncLoad extends AsyncTask<Void, Void, List<Exercise>> {
+        @Override
+        protected List<Exercise> doInBackground(Void... voids) {
+
+            AppDataBase appDB = AppDataBase.getDataBase(ShowRoutine.this);
+            List<Exercise> items = new ArrayList<>();
+            List<Exercise> aux = appDB.exerciseDAO().getAll();
+
+            if(aux.size()!=0) {
+                for (int i = 0; i < aux.size(); i++) {
+                    if (aux.get(i).getRoutineId() == routineItem.getId()) {
+                        items.add(aux.get(i));
+                    }
+                }
+            }
+
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(List<Exercise> items){
+            super.onPostExecute(items);
+            ExerciseList r = new ExerciseList(items);
+            mAdapter.load(r);
         }
 
     }

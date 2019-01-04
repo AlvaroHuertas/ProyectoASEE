@@ -118,16 +118,16 @@ public class FragmentTwo extends Fragment {
         protected void onPostExecute(ExerciseList result) {
             ExerciseList exerciseList=result;
             List<Exercise> aux=exerciseList.getElements();
-            ExerciseCRUD crud = ExerciseCRUD.getInstance(getContext());
+            //ExerciseCRUD crud = ExerciseCRUD.getInstance(getContext());
             /*List<Exercise> prueba=crud.getAll();*/
-            crud.deleteAll();
+            //crud.deleteAll();
 
             if(aux != null) {
 
                 for (int i = 0; i < aux.size(); i++) {
                     Exercise item = aux.get(i);
-                    long id = crud.insert(item);
-                    item.setExerciseId(id);
+                    //long id = crud.insert(item);
+                    //item.setExerciseId(id);
                 }
             }
             LinearLayoutManager lay_Manager=new LinearLayoutManager(mContext);
@@ -149,7 +149,6 @@ public class FragmentTwo extends Fragment {
         if(responseObject[0] != null) {
             JSONArray exercises = responseObject[0]
                     .getJSONArray(EXERCISE_TAG);
-            //TODO obtener todos los ejercicios y construir los objetos
             for (int idx = 0; idx < exercises.length(); idx++) {
 
                 // Get single exercise data - a Map

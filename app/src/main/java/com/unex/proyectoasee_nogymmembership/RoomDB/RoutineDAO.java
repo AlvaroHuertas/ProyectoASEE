@@ -28,6 +28,9 @@ public interface RoutineDAO {
     @Query("SELECT * FROM routine WHERE id = :id")
     public Routine getRoutine(int id);
 
+    @Query("SELECT * FROM routine WHERE id = :id")
+    Routine getRoutine(int id);
+
     @Query("DELETE FROM routine")
     public void deleteAll();
 }

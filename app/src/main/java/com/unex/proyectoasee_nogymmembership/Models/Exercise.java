@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "exercise", foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "exerciseId"))
+@Entity(tableName = "exercise", foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "routineId"))
 public class Exercise implements Serializable {
 
     @PrimaryKey(autoGenerate = true)

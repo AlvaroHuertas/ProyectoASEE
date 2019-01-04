@@ -14,6 +14,10 @@ public class ExerciseList implements Serializable {
         elements = e;
     }
 
+    public void clear(){
+        elements.clear();
+    }
+
     public List<Exercise> getElements() {
         return elements;
     }

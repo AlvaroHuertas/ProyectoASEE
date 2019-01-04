@@ -9,4 +9,10 @@
         android:title="@string/action_preferences"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="?android:attr/actionModeWebSearchDrawable"
+        android:showAsAction="collapseActionView|ifRoom" />
+
 </menu>
