@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
+import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseInRoutineAdapter;
 import com.unex.proyectoasee_nogymmembership.Adds.AddRoutineActivity;
 import com.unex.proyectoasee_nogymmembership.DBUtils.DBContract;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
@@ -39,7 +40,7 @@ public class ShowRoutine extends AppCompatActivity {
     private TextView routineTypeTextView;
 
     private RecyclerView mRecyclerView;
-    private ExerciseAdapter mAdapter;
+    private ExerciseInRoutineAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public static String INTENT_OBJECT_EXTRA = "Routine";
@@ -86,7 +87,7 @@ public class ShowRoutine extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ExerciseAdapter(null);
+        mAdapter = new ExerciseInRoutineAdapter(ShowRoutine.this);
 
         new AsyncLoad().execute();
         mRecyclerView.setAdapter(mAdapter);

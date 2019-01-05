@@ -128,7 +128,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
 
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView name;
         private TextView type;
@@ -168,8 +168,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
                         name.setBackgroundColor(Color.WHITE);
                     }
 
-                    RoutineCRUD crud = RoutineCRUD.getInstance(mContext);
-                    crud.updateStatus(routine.getId(), routine.getStatus());
+                    new AsyncStatus().execute(routine);
                 }
             });
 
@@ -192,6 +191,15 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
             appDB.routineDAO().deleteRoutines(routines[0]);
             return null;
         }
+    }
 
+    class AsyncStatus extends AsyncTask<Routine, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Routine... routines) {
+            AppDataBase appDB = AppDataBase.getDataBase(mContext);
+            appDB.routineDAO().updateStatus(routines[0]);
+            return null;
+        }
     }
 }
