@@ -7,11 +7,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,32 +26,36 @@ import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
 
-public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHolder> {
+public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHolder> implements Filterable {
 
     private Context mContext;
 
     private RoutineList routineList = new RoutineList();
+    private RoutineList routineListFull = new RoutineList();
+
+    private final OnItemClickListener listener;
+
+    private static final String TAG = "RoutineAdapter";
+
 
     public interface OnItemClickListener {
         void onItemClick(Routine item);     //Type of the element to be returned
     }
 
-    private final OnItemClickListener listener;
+    RoutineAdapter(RoutineList routineList) {
+        this.routineList = routineList;
+        listener = null;
+    }
+
 
     public RoutineAdapter(Context context, OnItemClickListener listener) {
         mContext = context;
         this.listener = listener;
     }
 
-    public RoutineAdapter(OnItemClickListener listener) {
-        this.listener = listener;
-    }
 
-
-
-    private AlertDialog AskOption(final Routine item, final int position)
-    {
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(mContext)
+    private AlertDialog AskOption(final Routine item, final int position) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(mContext)
                 //set message, title, and icon
                 .setTitle("Delete")
                 .setMessage("Do you want to Delete")
@@ -62,7 +69,6 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
                     }
 
                 })
-
 
 
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -80,6 +86,9 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     public void load(RoutineList items) {
         routineList.clear();
         routineList = items;
+        routineListFull = new RoutineList();
+        routineListFull.addAll(items.getElements());
+        Log.v(TAG, "Loading data");
         notifyDataSetChanged();
     }
 
@@ -96,12 +105,11 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.bind(routineList.get(position), listener);
 
-
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-               AlertDialog diaBox = AskOption(routineList.get(position), position);
-               diaBox.show();
+                AlertDialog diaBox = AskOption(routineList.get(position), position);
+                diaBox.show();
                 return false;
             }
         });
@@ -112,20 +120,63 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         return routineList.size();
     }
 
-    public void delete(Routine item, int position){
-        routineList.deleteItem(position);
+    @Override
+    public Filter getFilter() {
+        return routineFilter;
+    }
 
-         new AsyncDelete().execute(item);
+    private Filter routineFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            RoutineList filteredList = new RoutineList();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(routineListFull.getElements());
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Routine r : routineListFull.getElements()) {
+                    if (r.getText1().toLowerCase().contains(filterPattern)) {
+                        filteredList.addItem(r);
+                    }
+                }
+
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList.getElements();
+            Log.v(TAG, "Returning values Filtered list");
+            for (Routine r : filteredList.getElements()) {
+                Log.v(TAG, "Routine name: " + r.getName());
+            }
+
+            Log.v(TAG, "Returning values Full list");
+            for (Routine r : routineListFull.getElements()) {
+                Log.v(TAG, "Routine name: " + r.getName());
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            routineList.clear();
+            routineList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    public void delete(Routine item, int position) {
+        routineList.deleteItem(position);
+        routineListFull.deleteItem(position);
+        new AsyncDelete().execute(item);
         notifyDataSetChanged();
     }
 
     public void add(Routine item) {
-
         routineList.addItem(item);
+        routineListFull.addItem(item);
         notifyDataSetChanged();
 
     }
-
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -189,6 +240,13 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         @Override
         protected Void doInBackground(Routine... routines) {
             AppDataBase appDB = AppDataBase.getDataBase(mContext);
+
+/*            Log.v(TAG, "Routine");
+            Log.v(TAG, String.valueOf(routines[0].getId()));
+            Log.v(TAG, routines[0].getName());
+            Log.v(TAG, routines[0].getType());
+            Log.v(TAG, routines[0].getStatus().toString());*/
+
             appDB.routineDAO().deleteRoutines(routines[0]);
             return null;
         }

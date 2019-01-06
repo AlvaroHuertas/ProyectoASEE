@@ -54,6 +54,10 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
         notifyDataSetChanged();
     }
 
+    public Routine getFromPosition(int position) {
+        return routineList.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView name;
@@ -83,11 +87,12 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
     @Override
     public int getItemCount() {
         List<Routine> exercisesAux = new ArrayList<>();
-        exercisesAux=routineList.getElements();
-        if(exercisesAux != null)
+        if(routineList != null) {
+            exercisesAux = routineList.getElements();
             return exercisesAux.size();
-        else
+        } else {
             Log.i("ExerciseList:", "is NULL");
+        }
         return 0;
     }
 

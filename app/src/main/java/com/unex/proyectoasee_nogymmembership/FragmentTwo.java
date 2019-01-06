@@ -2,18 +2,25 @@ package com.unex.proyectoasee_nogymmembership;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
+import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
 import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
@@ -57,6 +64,7 @@ public class FragmentTwo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
 
         //Inflate del layout para el fragment
         View rootView = inflater.inflate(R.layout.fragment_fragment_two, container, false);
@@ -67,6 +75,36 @@ public class FragmentTwo extends Fragment {
 
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.search){
+            Toast.makeText(getActivity(), "Clicked on search", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == R.id.action_preferences){
+            Intent intent = new Intent(getContext(), UserPreferences.class);
+            startActivity(intent);
+        }
+        return true;
     }
 
     private class HttpGetTask extends AsyncTask<Void, Void, ExerciseList> {

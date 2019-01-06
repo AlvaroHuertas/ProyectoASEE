@@ -52,4 +52,7 @@ public class RoutineList {
         return elements.size();
     }
 
+    public void addAll(List<Routine> r) {
+        elements.addAll(r);
+    }
 }
