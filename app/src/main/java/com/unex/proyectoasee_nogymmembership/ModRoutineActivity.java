@@ -1,6 +1,7 @@
 package com.unex.proyectoasee_nogymmembership;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
+import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 public class ModRoutineActivity extends Activity {
@@ -41,7 +43,7 @@ public class ModRoutineActivity extends Activity {
 
         ArrayAdapter myAdap = (ArrayAdapter) type.getAdapter(); //cast to an ArrayAdapter
 
-        int spinnerPosition = myAdap.getPosition(routineItem.getType().toString());
+        int spinnerPosition = myAdap.getPosition(routineItem.getType());
 
         //set the default according to value
         type.setSelection(spinnerPosition);
@@ -73,24 +75,13 @@ public class ModRoutineActivity extends Activity {
                 routineItem.setName(nameRoutine);
                 routineItem.setType(typeRoutine);
 
-                new AsyncUpdate().execute(routineItem);
+                Intent data = new Intent();
+                data.putExtra("Routine", routineItem);
 
+                setResult(RESULT_OK, data);
                 finish();
             }
         });
      }
-    class AsyncUpdate extends AsyncTask<Routine, Void, Routine> {
 
-        @Override
-        protected Routine doInBackground(Routine... routines) {
-            AppDataBase appDB = AppDataBase.getDataBase(ModRoutineActivity.this);
-            appDB.routineDAO().updateStatus(routines[0]);
-            return routines[0];
-        }
-
-        @Override
-        protected void onPostExecute(Routine routine){
-            super.onPostExecute(routine);
-        }
-    }
 }

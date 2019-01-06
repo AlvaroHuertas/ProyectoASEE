@@ -42,22 +42,11 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         void onItemClick(Routine item);     //Type of the element to be returned
     }
 
-    RoutineAdapter(RoutineList routineList) {
-        this.routineList = routineList;
-        listener = null;
-    }
-
 
     public RoutineAdapter(Context context, OnItemClickListener listener) {
         mContext = context;
         this.listener = listener;
     }
-
-    public RoutineAdapter(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
-
 
     private AlertDialog AskOption(final Routine item, final int position)
     {
@@ -152,15 +141,6 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
             }
             FilterResults results = new FilterResults();
             results.values = filteredList.getElements();
-            Log.v(TAG, "Returning values Filtered list");
-            for (Routine r : filteredList.getElements()) {
-                Log.v(TAG, "Routine name: " + r.getName());
-            }
-
-            Log.v(TAG, "Returning values Full list");
-            for (Routine r : routineListFull.getElements()) {
-                Log.v(TAG, "Routine name: " + r.getName());
-            }
             return results;
         }
 

@@ -112,7 +112,7 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
         protected Exercise doInBackground(Void... voids) {
 
             AppDataBase appDB = AppDataBase.getDataBase(AddExerciseToRoutine.this);
-            Exercise exercise=appDB.exerciseDAO().getExercise(id_ex);
+            Exercise exercise=appDB.exerciseDAO().getExercise((int)id_ex);
 
 
             if(exercise==null){

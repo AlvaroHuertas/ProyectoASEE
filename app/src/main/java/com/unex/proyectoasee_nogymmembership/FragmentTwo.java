@@ -2,18 +2,26 @@ package com.unex.proyectoasee_nogymmembership;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
+import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
 import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
@@ -47,11 +55,10 @@ public class FragmentTwo extends Fragment {
     private static final String IMAGE_TAG = "image";
 
 
+    private static RecyclerView mExercisesRecycler = null;
 
-    private static RecyclerView mExercisesRecycler=null;
-
-    ExerciseAdapter mAdapter;
-    ExerciseList exerciseList;
+    public ExerciseAdapter mAdapter;
+    public ExerciseList exerciseList;
 
 
     public FragmentTwo() {
@@ -61,23 +68,53 @@ public class FragmentTwo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        //Inflate del layout para el fragment
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_fragment_two, container, false);
-       this.mExercisesRecycler=(RecyclerView) rootView.findViewById(R.id.exercises_recycler);
+        return rootView;
+    }
 
-        //Ejecutar petición GET
-        NetworkingAndroidHttpClientJSON petition=new NetworkingAndroidHttpClientJSON();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.mExercisesRecycler = (RecyclerView) view.findViewById(R.id.exercises_recycler);
 
-        this.exerciseList=petition.getExerciseList();
+        NetworkingAndroidHttpClientJSON petition = new NetworkingAndroidHttpClientJSON();
+
+        this.exerciseList = petition.getExerciseList();
 
         LinearLayoutManager lay_Manager = new LinearLayoutManager(getActivity());
         mExercisesRecycler.setLayoutManager(lay_Manager);
 
         mAdapter = new ExerciseAdapter(getActivity(), exerciseList);
         mExercisesRecycler.setAdapter(mAdapter);
-
-        return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_preferences) {
+            Intent intent = new Intent(getContext(), UserPreferences.class);
+            startActivity(intent);
+        }
+        return true;
+    }
 }

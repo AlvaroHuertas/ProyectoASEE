@@ -98,5 +98,7 @@ public class Exercise implements Serializable {
     }
 
 
-
+    public String getText1() {
+        return this.name;
+    }
 }

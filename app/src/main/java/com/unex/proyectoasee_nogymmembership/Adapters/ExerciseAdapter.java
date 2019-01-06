@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.unex.proyectoasee_nogymmembership.Adds.ExerciseDescActivity;
@@ -19,10 +21,48 @@ import com.unex.proyectoasee_nogymmembership.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder>{
+public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> implements Filterable {
     private Context context;
+
     private ExerciseList exerciseList;
+    private ExerciseList exerciseListFull;
+
     private final OnItemClickListener listener;
+
+    @Override
+    public Filter getFilter() {
+        return exerciseFilter;
+    }
+
+    private Filter exerciseFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ExerciseList filteredList = new ExerciseList();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(exerciseListFull.getElements());
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Exercise e : exerciseListFull.getElements()) {
+                    if (e.getText1().toLowerCase().contains(filterPattern)) {
+                        filteredList.addItem(e);
+                    }
+                }
+
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList.getElements();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            exerciseList.clear();
+            exerciseList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
     public interface OnItemClickListener {
@@ -32,18 +72,12 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     public ExerciseAdapter(Context context, ExerciseList exerciseList) {
         this.context = context;
         this.exerciseList = exerciseList;
+        this.exerciseListFull = new ExerciseList();
+        this.exerciseListFull.addAll(exerciseList.getElements());
         this.listener = null;
     }
 
-    public ExerciseAdapter(OnItemClickListener listener) {
-        this.exerciseList = new ExerciseList();
-        this.listener = listener;
-    }
 
-    public ExerciseAdapter(Context context, OnItemClickListener listener) {
-        this.context = context;
-        this.listener = listener;
-    }
 
     public void load(ExerciseList items) {
         exerciseList.clear();

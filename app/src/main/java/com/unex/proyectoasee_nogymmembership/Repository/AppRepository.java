@@ -42,4 +42,8 @@ public class AppRepository {
         long id = appDB.routineDAO().insert(routine);
         return id;
     }
+
+    public void updateRoutine(Routine routine) {
+        appDB.routineDAO().updateStatus(routine);
+    }
 }

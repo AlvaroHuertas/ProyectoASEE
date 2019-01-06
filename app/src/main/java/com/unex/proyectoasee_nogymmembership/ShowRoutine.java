@@ -23,6 +23,7 @@ import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
+import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
@@ -44,17 +45,18 @@ public class ShowRoutine extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     public static String INTENT_OBJECT_EXTRA = "Routine";
+    private static final int MOD_ROUTINE_ITEM_REQUEST = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_showroutine);
 
-        // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
 
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_mod_routine);
 
@@ -65,7 +67,7 @@ public class ShowRoutine extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ShowRoutine.this, ModRoutineActivity.class);
                 intent.putExtra("Routine",routineItem);
-                startActivity(intent);
+                startActivityForResult(intent, MOD_ROUTINE_ITEM_REQUEST);
             }
         });
     }
@@ -92,6 +94,17 @@ public class ShowRoutine extends AppCompatActivity {
         new AsyncLoad().execute();
         mRecyclerView.setAdapter(mAdapter);
 
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MOD_ROUTINE_ITEM_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Routine routine = new Routine(data);
+                new AsyncUpdate().execute((Routine) data.getSerializableExtra("Routine"));
+            }
+        }
 
     }
 
@@ -145,4 +158,22 @@ public class ShowRoutine extends AppCompatActivity {
         }
 
     }
+
+    class AsyncUpdate extends AsyncTask<Routine, Void, Routine> {
+
+        @Override
+        protected Routine doInBackground(Routine... routines) {
+            AppRepository r = AppRepository.getInstance(ShowRoutine.this);
+            r.updateRoutine(routines[0]);
+            return routines[0];
+        }
+
+        @Override
+        protected void onPostExecute(Routine routine){
+            super.onPostExecute(routine);
+            routineItem = routine;
+        }
+    }
+
+
 }

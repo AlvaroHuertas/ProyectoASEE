@@ -71,19 +71,13 @@ public class FragmentOne extends Fragment {
             }
         });
 
-        //Obtenemos referencia a la RecyclerView
         mRecyclerView = (RecyclerView) view.findViewById(R.id.routines_recycler);
 
-        //Este ajuste mejorará el desempeño de la RecyclerVew si sabemos que introduciendo
-        //más contenido no cambiará el tamaño del layout
         mRecyclerView.setHasFixedSize(true);
 
-        //Definimos un linear layout manager
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
-        //Definir el adapter para la RecyclerView
         mAdapter = new RoutineAdapter(getContext(), new RoutineAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Routine item) {

@@ -29,4 +29,12 @@ public class ExerciseList implements Serializable {
     public void setElements(List<Exercise> elements) {
         this.elements = elements;
     }
+
+    public void addAll(List<Exercise> e) {
+        elements.addAll(e);
+    }
+
+    public void addItem(Exercise e) {
+        elements.add(e);
+    }
 }

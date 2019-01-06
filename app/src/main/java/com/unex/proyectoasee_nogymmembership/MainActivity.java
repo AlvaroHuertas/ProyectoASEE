@@ -59,54 +59,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        String username;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        username=sharedPref.getString(SettingsFragment.KEY_PREF_USERNAME,"");
-
-
     }
-
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        /*getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) item.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });*/
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-/*        int id = item.getItemId();
-
-        if (id == R.id.action_preferences) {
-            Intent intent = new Intent(getApplicationContext(), UserPreferences.class);
-            startActivity(intent);
-        }*/
-        return super.onOptionsItemSelected(item);
-    }
-
 
 }
