@@ -2,6 +2,7 @@ package com.unex.proyectoasee_nogymmembership.Repository;
 
 import android.content.Context;
 
+import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
@@ -43,7 +44,31 @@ public class AppRepository {
         return id;
     }
 
+    /**
+     * Update attributes of a certain routine
+     * @param routine Routine we are going to update
+     */
     public void updateRoutine(Routine routine) {
         appDB.routineDAO().updateStatus(routine);
+    }
+
+    /**
+     * Return a list with all the exercises belonging to one routine
+     * @param id Id of the routine that contains the exercises
+     * @return List of exercises from the routine
+     */
+    public List<Exercise> getAllExercisesById(long id) {
+        List<Exercise> e = appDB.exerciseDAO().getExercisesByRoutineId(id);
+        return e;
+    }
+
+    /**
+     * GET a certain routine
+     * @param id Id of the routine
+     * @return Routine that we are looking for
+     */
+    public Routine getRoutine(int id) {
+        Routine r = appDB.routineDAO().getRoutine(id);
+        return r;
     }
 }

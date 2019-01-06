@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.ShadowDrawableWrapper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -117,8 +118,8 @@ public class ShowRoutine extends AppCompatActivity {
     class AsyncLoadRoutine extends AsyncTask<Long,Void,Routine> {
         @Override
         protected Routine doInBackground(Long... ints) {
-            AppDataBase appDB = AppDataBase.getDataBase(ShowRoutine.this);
-            Routine item = appDB.routineDAO().getRoutine((int)ints[0].longValue());
+            AppRepository r = AppRepository.getInstance(ShowRoutine.this);
+            Routine item = r.getRoutine((int)ints[0].longValue());
             return item;
         }
 
@@ -134,19 +135,8 @@ public class ShowRoutine extends AppCompatActivity {
     class AsyncLoad extends AsyncTask<Void, Void, List<Exercise>> {
         @Override
         protected List<Exercise> doInBackground(Void... voids) {
-
-            AppDataBase appDB = AppDataBase.getDataBase(ShowRoutine.this);
-            List<Exercise> items = new ArrayList<>();
-            List<Exercise> aux = appDB.exerciseDAO().getAll();
-
-            if(aux.size()!=0) {
-                for (int i = 0; i < aux.size(); i++) {
-                    if (aux.get(i).getRoutineId() == routineItem.getId()) {
-                        items.add(aux.get(i));
-                    }
-                }
-            }
-
+            AppRepository r = AppRepository.getInstance(ShowRoutine.this);
+            List<Exercise> items = r.getAllExercisesById(routineItem.getId());
             return items;
         }
 

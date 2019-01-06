@@ -28,5 +28,8 @@ public interface ExerciseDAO {
     Exercise getExercise(int id);
 
     @Update
-    public int updateRoutine(Exercise item);
+    public int updateExercise(Exercise item);
+
+    @Query("SELECT * FROM exercise WHERE routineId = :id")
+    public List<Exercise> getExercisesByRoutineId(long id);
 }
