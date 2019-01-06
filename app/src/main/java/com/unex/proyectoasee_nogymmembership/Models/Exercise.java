@@ -7,14 +7,16 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "exercise", foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "routineId"))
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "exercise", foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "routineId", onDelete = CASCADE))
 public class Exercise implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private long exerciseId;
-    private String name;
-    private String description;
-    private long routineId;
+    public long exerciseId;
+    public String name;
+    public String description;
+    public long routineId;
 
 
     @Ignore
@@ -95,10 +97,6 @@ public class Exercise implements Serializable {
         this.routineId = routineId;
     }
 
-/*    public String getURI() {
-        return imageURI;
-    }
-    */
 
 
 }

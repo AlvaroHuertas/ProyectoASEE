@@ -13,16 +13,17 @@ import java.io.Serializable;
 @Entity(tableName = "routine")
 public class Routine implements Serializable {
 
+
     public enum Status {
         NOTDONE, DONE
     };
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
-    private String name;
-    private String type;
+    public long id;
+    public String name;
+    public String type;
     @TypeConverters(StatusConverter.class)
-    private Status status;
+    public Status status;
 
     @Ignore
     private ExerciseList exercises;
@@ -84,6 +85,11 @@ public class Routine implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Ignore
+    public String getText1() {
+        return name;
     }
 
     @Ignore

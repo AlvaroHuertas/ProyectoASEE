@@ -11,15 +11,21 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.support.v7.widget.SearchView;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
 import com.unex.proyectoasee_nogymmembership.Adds.AddRoutineActivity;
+import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
 import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
+import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
@@ -47,6 +53,7 @@ public class FragmentOne extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_fragment_one, container, false);
         return rootView;
     }
@@ -60,7 +67,7 @@ public class FragmentOne extends Fragment {
             public void onClick(View view) {
                 // - Attach Listener to FloatingActionButton. Implement onClick()
                 Intent intent = new Intent(getContext(), AddRoutineActivity.class);
-                startActivityForResult(intent,ADD_ROUTINE_ITEM_REQUEST);
+                startActivityForResult(intent, ADD_ROUTINE_ITEM_REQUEST);
             }
         });
 
@@ -93,15 +100,9 @@ public class FragmentOne extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //  - Check result code and request code.
-        // If user submitted a new Routine
-        // Create a new Routine from the data Intent
-        // and then add it to the adapter
-        if (requestCode == ADD_ROUTINE_ITEM_REQUEST){
-            if (resultCode == RESULT_OK){
+        if (requestCode == ADD_ROUTINE_ITEM_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 Routine routine = new Routine(data);
-
                 new AsyncInsert().execute(routine);
             }
         }
@@ -109,11 +110,38 @@ public class FragmentOne extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_preferences) {
+            Intent intent = new Intent(getContext(), UserPreferences.class);
+            startActivity(intent);
+        }
+        return true;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-
-
-            loadItems();
+        loadItems();
     }
 
     @Override
@@ -122,7 +150,7 @@ public class FragmentOne extends Fragment {
 
         // ALTERNATIVE: Save all ToDoItems
 
-        }
+    }
 
     @Override
     public void onDestroy() {
@@ -131,22 +159,21 @@ public class FragmentOne extends Fragment {
     }
 
 
-
     // Load stored Routines
     private void loadItems() {
-     new AsyncLoad().execute();
+        new AsyncLoad().execute();
     }
 
-    class AsyncLoad extends AsyncTask<Void, Void, List<Routine>>{
+    class AsyncLoad extends AsyncTask<Void, Void, List<Routine>> {
         @Override
         protected List<Routine> doInBackground(Void... voids) {
-            AppDataBase appDB = AppDataBase.getDataBase(getContext());
-            List<Routine> items = appDB.routineDAO().getAll();
+            AppRepository r = AppRepository.getInstance(getContext());
+            List<Routine> items = r.getAllRoutines();
             return items;
         }
 
         @Override
-        protected void onPostExecute(List<Routine> items){
+        protected void onPostExecute(List<Routine> items) {
             super.onPostExecute(items);
             RoutineList r = new RoutineList(items);
             mAdapter.load(r);
@@ -154,20 +181,18 @@ public class FragmentOne extends Fragment {
 
     }
 
-    class AsyncInsert extends AsyncTask<Routine, Void, Routine>{
+    class AsyncInsert extends AsyncTask<Routine, Void, Routine> {
 
         @Override
         protected Routine doInBackground(Routine... routines) {
-            AppDataBase appDB = AppDataBase.getDataBase(getContext());
-            long id = appDB.routineDAO().insert(routines[0]);
-
+            AppRepository r = AppRepository.getInstance(getContext());
+            long id = r.addRoutine(routines[0]);
             routines[0].setId(id);
-
             return routines[0];
         }
 
         @Override
-        protected void onPostExecute(Routine routine){
+        protected void onPostExecute(Routine routine) {
             super.onPostExecute(routine);
             mAdapter.add(routine);
         }

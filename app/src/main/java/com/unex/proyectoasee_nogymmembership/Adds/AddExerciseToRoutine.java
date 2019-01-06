@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -30,10 +31,12 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
     private RecyclerView mRecyclerView;
     private RoutineListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private int id_ex=-1;
+    private long id_ex=-1;
     private String name;
     private String description;
-    private int id_rou;
+    private long id_rou;
+
+    private static final String TAG = "RoutineAdapter";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,8 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
 
     @Override
     public void onItemClicked(int position) {
-        this.id_rou=position+1;
+        this.id_rou = mAdapter.getFromPosition(position).getId();
+
         new AsyncAddRoutine().execute();
 
     }
@@ -110,13 +114,18 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
             AppDataBase appDB = AppDataBase.getDataBase(AddExerciseToRoutine.this);
             Exercise exercise=appDB.exerciseDAO().getExercise(id_ex);
 
+
             if(exercise==null){
                 Exercise exerciseToInsert=new Exercise(id_ex,name,description,id_rou);
+
+                Log.v(TAG, "Routine added");
+                Log.v(TAG, String.valueOf(id_rou));
+
                 appDB.exerciseDAO().insert(exerciseToInsert);
 
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast toast1 = Toast.makeText(AddExerciseToRoutine.this, "Añadido a rutina", Toast.LENGTH_SHORT);
+                        Toast toast1 = Toast.makeText(AddExerciseToRoutine.this, "Añadido a rutina ", Toast.LENGTH_SHORT);
                         toast1.setGravity(Gravity.BOTTOM|Gravity.CENTER, 0, 0);
                         toast1.show();
                     }

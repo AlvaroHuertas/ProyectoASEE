@@ -7,11 +7,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,17 +26,27 @@ import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
 
-public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHolder> {
+public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHolder> implements Filterable {
 
     private Context mContext;
 
     private RoutineList routineList = new RoutineList();
+    private RoutineList routineListFull = new RoutineList();
+
+    private final OnItemClickListener listener;
+
+    private static final String TAG = "RoutineAdapter";
+
 
     public interface OnItemClickListener {
         void onItemClick(Routine item);     //Type of the element to be returned
     }
 
-    private final OnItemClickListener listener;
+    RoutineAdapter(RoutineList routineList) {
+        this.routineList = routineList;
+        listener = null;
+    }
+
 
     public RoutineAdapter(Context context, OnItemClickListener listener) {
         mContext = context;
@@ -80,6 +93,9 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     public void load(RoutineList items) {
         routineList.clear();
         routineList = items;
+        routineListFull = new RoutineList();
+        routineListFull.addAll(items.getElements());
+        Log.v(TAG, "Loading data");
         notifyDataSetChanged();
     }
 
@@ -112,10 +128,54 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         return routineList.size();
     }
 
-    public void delete(Routine item, int position){
-        routineList.deleteItem(position);
+    @Override
+    public Filter getFilter() {
+        return routineFilter;
+    }
 
-         new AsyncDelete().execute(item);
+    private Filter routineFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            RoutineList filteredList = new RoutineList();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(routineListFull.getElements());
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Routine r : routineListFull.getElements()) {
+                    if (r.getText1().toLowerCase().contains(filterPattern)) {
+                        filteredList.addItem(r);
+                    }
+                }
+
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList.getElements();
+            Log.v(TAG, "Returning values Filtered list");
+            for (Routine r : filteredList.getElements()) {
+                Log.v(TAG, "Routine name: " + r.getName());
+            }
+
+            Log.v(TAG, "Returning values Full list");
+            for (Routine r : routineListFull.getElements()) {
+                Log.v(TAG, "Routine name: " + r.getName());
+            }
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            routineList.clear();
+            routineList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    public void delete(Routine item, int position) {
+        routineList.deleteItem(position);
+        routineListFull.deleteItem(position);
+        new AsyncDelete().execute(item);
         notifyDataSetChanged();
     }
 
