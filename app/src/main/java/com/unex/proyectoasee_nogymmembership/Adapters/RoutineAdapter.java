@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
@@ -22,6 +23,7 @@ import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
 import com.unex.proyectoasee_nogymmembership.R;
+import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
@@ -34,50 +36,40 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
     private RoutineList routineListFull = new RoutineList();
 
     private final OnItemClickListener listener;
+    private final OnItemLongClickListener onLongClickListener;
 
     private static final String TAG = "RoutineAdapter";
+
+    public void deleteItem(Routine routine) {
+        for(Routine r : routineList.getElements()){
+            if(r.getId() == routine.getId()){
+                routineList.deleteItem(routine);
+                routineListFull.deleteItem(routine);
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+    public Routine getRoutineFromPosition(int position) {
+        return routineList.get(position);
+    }
 
 
     public interface OnItemClickListener {
         void onItemClick(Routine item);     //Type of the element to be returned
     }
 
+    public interface OnItemLongClickListener {
+        void onLongItemClickListener(Routine item);
+    }
 
-    public RoutineAdapter(Context context, OnItemClickListener listener) {
+
+    public RoutineAdapter(Context context, OnItemClickListener listener, OnItemLongClickListener onLongClickListener) {
         mContext = context;
         this.listener = listener;
+        this.onLongClickListener = onLongClickListener;
     }
 
-    private AlertDialog AskOption(final Routine item, final int position)
-    {
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(mContext)
-                //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete")
-                .setIcon(R.drawable.ic_delete_name)
-
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        delete(item, position);
-                        dialog.dismiss();
-                    }
-
-                })
-
-
-
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                })
-                .create();
-        return myQuittingDialogBox;
-
-    }
 
     public void load(RoutineList items) {
         routineList.clear();
@@ -99,17 +91,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.bind(routineList.get(position), listener);
-
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-               AlertDialog diaBox = AskOption(routineList.get(position), position);
-               diaBox.show();
-                return false;
-            }
-        });
+        holder.bind(routineList.get(position), listener, onLongClickListener);
     }
 
     @Override
@@ -152,20 +134,10 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         }
     };
 
-    public void delete(Routine item, int position) {
-        routineList.deleteItem(position);
-        routineListFull.deleteItem(position);
-        new AsyncDelete().execute(item);
-        notifyDataSetChanged();
-    }
-
     public void add(Routine item) {
-
         routineList.addItem(item);
         notifyDataSetChanged();
-
     }
-
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -187,7 +159,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
             status = (CheckBox) itemView.findViewById(R.id.statusCheckBox);
         }
 
-        public void bind(final Routine routine, final OnItemClickListener listener) {
+        public void bind(final Routine routine, final OnItemClickListener listener, final OnItemLongClickListener longListener) {
 
             name.setText(routine.getName());
 
@@ -212,6 +184,7 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
                 }
             });
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -219,18 +192,18 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
                     listener.onItemClick(routine);
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    longListener.onLongItemClickListener(routine);
+                    return true;
+                }
+            });
+
+
         }
 
-    }
-
-    class AsyncDelete extends AsyncTask<Routine, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Routine... routines) {
-            AppDataBase appDB = AppDataBase.getDataBase(mContext);
-            appDB.routineDAO().deleteRoutines(routines[0]);
-            return null;
-        }
     }
 
     class AsyncStatus extends AsyncTask<Routine, Void, Void> {

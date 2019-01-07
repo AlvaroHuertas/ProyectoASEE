@@ -1,5 +1,7 @@
 package com.unex.proyectoasee_nogymmembership;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.AsyncTask;
@@ -73,6 +75,38 @@ public class ShowRoutine extends AppCompatActivity {
         });
     }
 
+    private AlertDialog AskOption(final Exercise item)
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(ShowRoutine.this)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_name)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        delete(item);
+                        dialog.dismiss();
+                    }
+
+                })
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
+
+    public void delete(Exercise item){
+        mAdapter.deleteItem(item);
+        new AsyncDelete().execute(item);
+    }
+
     public void setRoutineElements(){
 
         routineNameTextView = findViewById(R.id.routineNameTV);
@@ -90,7 +124,13 @@ public class ShowRoutine extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ExerciseInRoutineAdapter(ShowRoutine.this);
+        mAdapter = new ExerciseInRoutineAdapter(ShowRoutine.this, new ExerciseInRoutineAdapter.OnItemLongClickListener() {
+            @Override
+            public void onLongItemClickListener(Exercise item) {
+                AlertDialog diaBox = AskOption(item);
+                diaBox.show();
+            }
+        });
 
         new AsyncLoad().execute();
         mRecyclerView.setAdapter(mAdapter);
@@ -165,5 +205,15 @@ public class ShowRoutine extends AppCompatActivity {
         }
     }
 
+
+    class AsyncDelete extends AsyncTask<Exercise, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Exercise... exercises) {
+            AppRepository r = AppRepository.getInstance(ShowRoutine.this);
+            r.deleteExercise(exercises[0]);
+            return null;
+        }
+    }
 
 }

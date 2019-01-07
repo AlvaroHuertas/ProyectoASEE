@@ -1,9 +1,12 @@
 package com.unex.proyectoasee_nogymmembership.Repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
+import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
+import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSON;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
@@ -12,12 +15,32 @@ public class AppRepository {
 
     private static AppRepository instance;
 
+    private static final String TAG = "AppRepository";
+
+    /**
+     * Instance of the database Room manager. It is going to manage all the local data
+     */
     private AppDataBase appDB;
 
+    /**
+     * Instance of the API manage. It is going to manage all the data from web resources.
+     */
+    private NetworkingAndroidHttpClientJSON appApi;
+
+    /**
+     * Private constructor of AppRepository class. Its a must in a singleton pattern.
+     * @param c Activity context from where we are instantiating the repository
+     */
     private AppRepository(Context c){
         appDB = AppDataBase.getDataBase(c);
+        appApi = new NetworkingAndroidHttpClientJSON();
     }
 
+    /**
+     * Singleton main class. Allow us to work with just one instance of the repository.
+     * @param c Activity context from where we are instantiating the repository
+     * @return Instance of repository
+     */
     public static AppRepository getInstance(Context c){
         if(instance == null){
             instance = new AppRepository(c.getApplicationContext());
@@ -26,11 +49,37 @@ public class AppRepository {
     }
 
     /**
+     * GET all the exercises from the API
+     * @return List containing all the exercises from the API
+     */
+    public List<Exercise> getExercisesFromApi(){
+        List<Exercise> exercises;
+        exercises = appApi.getExerciseList().getElements();
+
+        Log.v(TAG, "Getting exercises from the API");
+        for (Exercise e : exercises){
+            Log.v(TAG, e.getName());
+        }
+        return exercises;
+    }
+
+    /**
+     * GET one exercise filtered by its id
+     * @param id Id of the exercise
+     * @return The exercise
+     */
+    public Exercise getExercise(int id){
+        Exercise e = appDB.exerciseDAO().getExercise(id);
+        return e;
+    }
+
+    /**
      * GET all the routines stored in the database
      * @return List of routines currently stored in database
      */
     public List<Routine> getAllRoutines() {
         List<Routine> items = appDB.routineDAO().getAll();
+
         return items;
     }
 
@@ -70,5 +119,21 @@ public class AppRepository {
     public Routine getRoutine(int id) {
         Routine r = appDB.routineDAO().getRoutine(id);
         return r;
+    }
+
+    /**
+     * Deletes a routine from the database
+     * @param routine Routine we are going to delete
+     */
+    public void deleteRoutine(Routine routine) {
+        appDB.routineDAO().deleteRoutines(routine);
+    }
+
+    /**
+     * Deletes a routine from the database
+     * @param exercise Exercise we are going to delete
+     */
+    public void deleteExercise(Exercise exercise) {
+        appDB.exerciseDAO().deleteExercises(exercise);
     }
 }

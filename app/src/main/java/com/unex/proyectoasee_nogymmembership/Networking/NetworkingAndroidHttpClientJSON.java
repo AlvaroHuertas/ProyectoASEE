@@ -55,13 +55,19 @@ public class NetworkingAndroidHttpClientJSON {
         }
 
         public ExerciseList getExerciseList() {
-            //Wait 1,5 seconds until exercises are load
+            //Wait 2 seconds until exercises are load
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return exerciseList;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            exerciseList = new ExerciseList();
         }
 
         @Override
@@ -86,7 +92,12 @@ public class NetworkingAndroidHttpClientJSON {
             return null;
         }
 
-        public void jsonToList(JSONObject[] responseObject) {
+        @Override
+        protected void onPostExecute(ExerciseList exerciseList) {
+            this.exerciseList = exerciseList;
+        }
+
+        public List<Exercise> jsonToList(JSONObject[] responseObject) {
             List<Exercise> exercisesList = new ArrayList<>();
             try {
 
@@ -109,6 +120,7 @@ public class NetworkingAndroidHttpClientJSON {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            return exercisesList;
         }
 
     }
