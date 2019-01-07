@@ -18,8 +18,8 @@ public class ExerciseList implements Serializable {
         elements.clear();
     }
 
-    public void deleteItem(int position){
-        elements.remove(position);
+    public void deleteItem(Exercise e){
+        elements.remove(e);
     }
 
     public List<Exercise> getElements() {

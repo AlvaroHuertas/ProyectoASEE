@@ -27,9 +27,9 @@ public class NetworkingAndroidHttpClientJSON {
     private ExerciseList exerciseList;
 
     public NetworkingAndroidHttpClientJSON() {
-        HttpGetTask httpGetTask=new HttpGetTask();
+        HttpGetTask httpGetTask = new HttpGetTask();
         httpGetTask.execute();
-        this.exerciseList=httpGetTask.getExerciseList();
+        this.exerciseList = httpGetTask.getExerciseList();
     }
 
     public ExerciseList getExerciseList() {
@@ -49,18 +49,24 @@ public class NetworkingAndroidHttpClientJSON {
 
         private View rootView;
 
-        public HttpGetTask(){
-            this.exerciseList=new ExerciseList();
+        public HttpGetTask() {
+            this.exerciseList = new ExerciseList();
         }
 
         public ExerciseList getExerciseList() {
             //Wait until exercises are load
             try {
-                Thread.sleep(1500);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return exerciseList;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            exerciseList = new ExerciseList();
         }
 
         @Override
@@ -81,12 +87,18 @@ public class NetworkingAndroidHttpClientJSON {
                     new String[]{JSON_SEG, JSON_SEG2, JSON_SEG_IMG});
             result[1] = NetworkUtils.getJSONResponse(queryURL);
 
-            jsonToList(result);
+            if (result != null)
+                return new ExerciseList(jsonToList(result));
 
             return null;
         }
 
-        public void jsonToList(JSONObject[] responseObject) {
+        @Override
+        protected void onPostExecute(ExerciseList exerciseList) {
+            this.exerciseList = exerciseList;
+        }
+
+        public List<Exercise> jsonToList(JSONObject[] responseObject) {
             List<Exercise> exercisesList = new ArrayList<>();
             try {
 
@@ -96,17 +108,15 @@ public class NetworkingAndroidHttpClientJSON {
                     for (int idx = 0; idx < exercises.length(); idx++) {
                         // Get single exercise data - a Map
                         JSONObject exercise = (JSONObject) exercises.get(idx);
-
                         Exercise exerciseObj = new Exercise(idx, exercise.get(NAME_TAG).toString(), exercise.get(DESCRIPTION_TAG).toString(), "");
-
                         exercisesList.add(exerciseObj);
                     }
-                 this.exerciseList.setElements(exercisesList);
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            return exercisesList;
         }
 
     }

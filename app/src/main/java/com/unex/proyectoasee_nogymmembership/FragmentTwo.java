@@ -27,6 +27,7 @@ import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkUtils;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSON;
+import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,6 +71,7 @@ public class FragmentTwo extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_fragment_two, container, false);
+        this.exerciseList = new ExerciseList();
         return rootView;
     }
 
@@ -78,9 +80,7 @@ public class FragmentTwo extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mExercisesRecycler = (RecyclerView) view.findViewById(R.id.exercises_recycler);
 
-        NetworkingAndroidHttpClientJSON petition = new NetworkingAndroidHttpClientJSON();
-
-        this.exerciseList = petition.getExerciseList();
+        new AsynLoadExercises().execute();
 
         LinearLayoutManager lay_Manager = new LinearLayoutManager(getActivity());
         mExercisesRecycler.setLayoutManager(lay_Manager);
@@ -116,5 +116,20 @@ public class FragmentTwo extends Fragment {
             startActivity(intent);
         }
         return true;
+    }
+
+    class AsynLoadExercises extends AsyncTask<Void, Void, ExerciseList>{
+
+        @Override
+        protected ExerciseList doInBackground(Void... voids) {
+            AppRepository r = AppRepository.getInstance(getContext());
+            return new ExerciseList(r.getExercisesFromApi());
+        }
+
+        @Override
+        protected void onPostExecute(ExerciseList items){
+            super.onPostExecute(items);
+            exerciseList = items;
+        }
     }
 }

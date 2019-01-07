@@ -1,6 +1,8 @@
 package com.unex.proyectoasee_nogymmembership;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 import android.support.v7.widget.SearchView;
 
@@ -49,6 +52,36 @@ public class FragmentOne extends Fragment {
         // Required empty public constructor
     }
 
+    private AlertDialog AskOption(final Routine routine)
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getContext())
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_name)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        delete(routine);
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +117,12 @@ public class FragmentOne extends Fragment {
                 Intent intent = new Intent(getContext(), ShowRoutine.class);
                 intent.putExtra("Routine", item);
                 startActivity(intent);
+            }
+        }, new RoutineAdapter.OnItemLongClickListener() {
+            @Override
+            public void onLongItemClickListener(Routine item) {
+                AlertDialog diaBox = AskOption(item);
+                diaBox.show();
             }
         });
 
@@ -152,6 +191,11 @@ public class FragmentOne extends Fragment {
         super.onDestroy();
     }
 
+    public void delete(Routine routine) {
+        mAdapter.deleteItem(routine);
+        new AsyncDeleteRoutine().execute(routine);
+    }
+
 
     // Load stored Routines
     private void loadItems() {
@@ -191,5 +235,17 @@ public class FragmentOne extends Fragment {
             mAdapter.add(routine);
         }
     }
+
+
+    class AsyncDeleteRoutine extends AsyncTask<Routine, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Routine... routines) {
+            AppRepository r = AppRepository.getInstance(getContext());
+            r.deleteRoutine(routines[0]);
+            return null;
+        }
+    }
+
 
 }

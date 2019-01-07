@@ -27,37 +27,27 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
     private Context context;
     private ExerciseList exerciseList;
 
-    public ExerciseInRoutineAdapter(Context context) {
+    private final OnItemLongClickListener onLongClickListener;
+
+    public void deleteItem(Exercise item) {
+        for(Exercise e : exerciseList.getElements()){
+            if(e.getExerciseId() == item.getExerciseId()){
+                exerciseList.deleteItem(item);
+                notifyDataSetChanged();
+            }
+        }
+    }
+
+    public interface OnItemLongClickListener {
+        void onLongItemClickListener(Exercise item);
+    }
+
+    public ExerciseInRoutineAdapter(Context context, OnItemLongClickListener onLongClickListener) {
         this.context=context;
         this.exerciseList=new ExerciseList();
+        this.onLongClickListener = onLongClickListener;
     }
 
-    private AlertDialog AskOption(final Exercise item, final int position)
-    {
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(context)
-                //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete")
-                .setIcon(R.drawable.ic_delete_name)
-
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        delete(item, position);
-                        dialog.dismiss();
-                    }
-
-                })
-
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create();
-        return myQuittingDialogBox;
-
-    }
 
     public void load(ExerciseList items) {
         exerciseList.clear();
@@ -87,9 +77,8 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
 
             @Override
             public boolean onLongClick(View v) {
-                AlertDialog diaBox = AskOption(exerciseList.getElements().get(i),i);
-                diaBox.show();
-                return false;
+                onLongClickListener.onLongItemClickListener(exerciseList.getElements().get(i));
+                return true;
             }
         });
     }
@@ -105,13 +94,6 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
         return 0;
     }
 
-    public void delete(Exercise item, int position){
-        exerciseList.deleteItem(position);
-
-        new AsyncDelete().execute(item);
-        notifyDataSetChanged();
-    }
-
     @NonNull
     @Override
     public ExerciseInRoutineAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -120,14 +102,4 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
         return viewHolder;
     }
 
-
-    class AsyncDelete extends AsyncTask<Exercise, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Exercise... exercises) {
-            AppDataBase appDB = AppDataBase.getDataBase(context);
-            appDB.exerciseDAO().deleteExercises(exercises[0]);
-            return null;
-        }
-    }
 }
