@@ -9,10 +9,9 @@ import java.io.Serializable;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "exercise", foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "routineId", onDelete = CASCADE))
+@Entity(tableName = "exercise", primaryKeys = {"exerciseId","routineId"},foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "routineId", onDelete = CASCADE))
 public class Exercise implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
     public long exerciseId;
     public String name;
     public String description;

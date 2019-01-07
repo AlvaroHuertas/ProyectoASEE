@@ -33,7 +33,6 @@ public class SettingsFragment extends PreferenceFragment {
 
 
         //Muestra la pantalla de preferencias
-        //TODO evitar que la pantalla de preferencias se coloque encima de la actividad principal
         addPreferencesFromResource(R.xml.preferences);
         return view; }
 

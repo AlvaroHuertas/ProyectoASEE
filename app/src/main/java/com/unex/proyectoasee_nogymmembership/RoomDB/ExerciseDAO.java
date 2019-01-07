@@ -24,8 +24,8 @@ public interface ExerciseDAO {
     @Delete
     public void deleteExercises(Exercise... exercises);
 
-    @Query("SELECT * FROM exercise WHERE exerciseId = :id")
-    Exercise getExercise(int id);
+    @Query("SELECT * FROM exercise WHERE exerciseId = :id and routineId = :rid")
+    Exercise getExercise(long id, long rid);
 
     @Update
     public int updateExercise(Exercise item);

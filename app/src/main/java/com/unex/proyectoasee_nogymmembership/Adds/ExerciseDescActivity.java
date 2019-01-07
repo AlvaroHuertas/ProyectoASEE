@@ -25,7 +25,14 @@ public class ExerciseDescActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.exercise_desc);
+
+        Intent intent = getIntent();
+        id=intent.getIntExtra("id_exercise",-1);
+        if(id!=-1) {
+            setContentView(R.layout.exercise_desc);
+        }else{
+            setContentView(R.layout.exercise_desc_in_rout);
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -35,8 +42,7 @@ public class ExerciseDescActivity extends AppCompatActivity{
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
-        id=intent.getIntExtra("id_exercise",-1);
+
         name=intent.getStringExtra("name_exercise");
         description=intent.getStringExtra("description_exercise");
 
@@ -51,18 +57,24 @@ public class ExerciseDescActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        Button button = findViewById(R.id.exercise_button);
-        button.setOnClickListener(addToRoutine);
+        //don't run click button when coming from a routine
+        if(id!=-1) {
+            Button button = findViewById(R.id.exercise_button);
+            button.setOnClickListener(addToRoutine);
+        }
     }
 
     View.OnClickListener addToRoutine =new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getApplicationContext(), AddExerciseToRoutine.class);
-            intent.putExtra("id_exercise",id);
-            intent.putExtra("name_exercise",name);
-            intent.putExtra("description_exercise",description);
-            startActivity(intent);
+            //don't run click button when coming from a routine
+            if (id != -1) {
+                Intent intent = new Intent(getApplicationContext(), AddExerciseToRoutine.class);
+                intent.putExtra("id_exercise", id);
+                intent.putExtra("name_exercise", name);
+                intent.putExtra("description_exercise", description);
+                startActivity(intent);
+            }
         }
     };
 

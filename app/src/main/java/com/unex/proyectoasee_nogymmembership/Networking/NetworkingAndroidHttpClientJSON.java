@@ -10,6 +10,7 @@ import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -54,9 +55,9 @@ public class NetworkingAndroidHttpClientJSON {
         }
 
         public ExerciseList getExerciseList() {
-            //Wait until exercises are load
+            //Wait 1,5 seconds until exercises are load
             try {
-                Thread.sleep(1500);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -68,15 +69,14 @@ public class NetworkingAndroidHttpClientJSON {
             URL queryURL;
             JSONObject[] result = new JSONObject[2];
 
-            //Construir URI de EJERCICIOS con los campos definidos arriba
+            // Buil exercises URI with fields upside
             queryURL = NetworkUtils.buildURL(BASE_URL,
                     new String[]{JSON_SEG, JSON_SEG2, JSON_SEG_EX},
                     new Pair(LANGUAGE_P, "2"),
                     new Pair(EQUIPMENT_P, "7"));
             result[0] = NetworkUtils.getJSONResponse(queryURL);
 
-
-            //Construir URI de IMAGENES
+            // Build images URI
             queryURL = NetworkUtils.buildURL(BASE_URL,
                     new String[]{JSON_SEG, JSON_SEG2, JSON_SEG_IMG});
             result[1] = NetworkUtils.getJSONResponse(queryURL);
@@ -96,8 +96,10 @@ public class NetworkingAndroidHttpClientJSON {
                     for (int idx = 0; idx < exercises.length(); idx++) {
                         // Get single exercise data - a Map
                         JSONObject exercise = (JSONObject) exercises.get(idx);
-
-                        Exercise exerciseObj = new Exercise(idx, exercise.get(NAME_TAG).toString(), exercise.get(DESCRIPTION_TAG).toString(), "");
+                        // Delete HTML tags from description
+                        String description=Jsoup.parse(exercise.get(DESCRIPTION_TAG).toString()).text();
+                        // Build exercise object
+                        Exercise exerciseObj = new Exercise(idx, exercise.get(NAME_TAG).toString(), description, "");
 
                         exercisesList.add(exerciseObj);
                     }

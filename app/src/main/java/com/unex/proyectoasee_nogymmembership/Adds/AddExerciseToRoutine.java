@@ -68,13 +68,6 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new RoutineListAdapter(this,AddExerciseToRoutine.this);
-       /* RoutineList routineList=new RoutineList();
-        List<Routine> aux=routineList.getElements();
-        RoutineCRUD crud = RoutineCRUD.getInstance(getApplicationContext());
-        aux=crud.getAll();
-        routineList.setElements(aux);
-        mAdapter = new RoutineListAdapter(this,routineList,AddExerciseToRoutine.this);
-        */
 
         new AsyncLoad().execute();
 
@@ -112,9 +105,9 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
         protected Exercise doInBackground(Void... voids) {
 
             AppDataBase appDB = AppDataBase.getDataBase(AddExerciseToRoutine.this);
-            Exercise exercise=appDB.exerciseDAO().getExercise((int)id_ex);
+            Exercise exercise=appDB.exerciseDAO().getExercise((int)id_ex,(int)id_rou);
 
-
+            // Check exercise is not added
             if(exercise==null){
                 Exercise exerciseToInsert=new Exercise(id_ex,name,description,id_rou);
 
@@ -132,9 +125,14 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
                 });
 
             }else{
-                if(exercise.getRoutineId()!=id_rou){
-                    //TODO añadir ejercicio a varias rutinas
-                }
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast1 = Toast.makeText(AddExerciseToRoutine.this, "Ya se encuentra añadido a la rutina ", Toast.LENGTH_SHORT);
+                        toast1.setGravity(Gravity.BOTTOM|Gravity.CENTER, 0, 0);
+                        toast1.show();
+                    }
+                });
+
             }
             return exercise;
         }

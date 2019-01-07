@@ -48,8 +48,8 @@
     <string name="defaultValues">NOTE: By default the weight and height values will be setted as 70 kg and 175 cm</string>
     <string name="defaultWeight">70</string>
     <string name="defaultHeight">175</string>
-    <string name="title_activity_exercise_desc">ExerciseDescActivity</string>
-    <string name="title_activity_add_exercise_to_routine">AddExerciseToRoutine</string>
+    <string name="title_activity_exercise_desc">Exercise description</string>
+    <string name="title_activity_add_exercise_to_routine">Choose a routine to add</string>
     <string name="routine_prompt">Choose a type</string>
     <string name="search_title">Search</string>
 </resources>

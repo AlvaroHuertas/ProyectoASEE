@@ -62,17 +62,13 @@ public class AddRoutineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 String nameString = mNameText.getText().toString();
 
                 String typeString = mType.getSelectedItem().toString();
 
-                
-
                 Intent data = new Intent();
                 Routine.packageIntent(data, nameString, typeString);
 
-                //TODO - return data Intent and finish
                 setResult(RESULT_OK, data);
                 finish();
 
