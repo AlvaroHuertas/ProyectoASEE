@@ -77,11 +77,16 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         this.listener = null;
     }
 
-
+    public ExerciseAdapter(Context context){
+        this.context = context;
+        this.listener = null;
+    }
 
     public void load(ExerciseList items) {
         exerciseList.clear();
         exerciseList = items;
+        exerciseListFull = new ExerciseList();
+        exerciseListFull.addAll(items.getElements());
         notifyDataSetChanged();
     }
 

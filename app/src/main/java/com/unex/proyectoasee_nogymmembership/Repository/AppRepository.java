@@ -9,6 +9,7 @@ import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSON;
 import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppRepository {
@@ -53,12 +54,14 @@ public class AppRepository {
      * @return List containing all the exercises from the API
      */
     public List<Exercise> getExercisesFromApi(){
-        List<Exercise> exercises;
-        exercises = appApi.getExerciseList().getElements();
+        List<Exercise> exercises = new ArrayList<>();
+        if(appApi.getExerciseList() != null) {
+            exercises = appApi.getExerciseList().getElements();
 
-        Log.v(TAG, "Getting exercises from the API");
-        for (Exercise e : exercises){
-            Log.v(TAG, e.getName());
+            Log.v(TAG, "Getting exercises from the API");
+            for (Exercise e : exercises) {
+                Log.v(TAG, e.getName());
+            }
         }
         return exercises;
     }
@@ -150,4 +153,5 @@ public class AppRepository {
     public void addExercise(Exercise exerciseToInsert) {
         appDB.exerciseDAO().insert(exerciseToInsert);
     }
+
 }

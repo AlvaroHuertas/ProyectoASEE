@@ -3,6 +3,8 @@ package com.unex.proyectoasee_nogymmembership;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
@@ -48,12 +52,10 @@ public class FragmentTwo extends Fragment {
     private static final int ADD_CATEGORY_REQUEST = 0;
     public static final int RESULT_OK = -1;
     //Definición de clases JSON
-    private static final String EXERCISE_TAG = "results";
-    private static final String DESCRIPTION_TAG = "description";
-    private static final String NAME_TAG = "name";
-    private static final String CATEGORY_TAG = "category";
-    private static final String MUSCLES_TAG = "muscles";
-    private static final String IMAGE_TAG = "image";
+    private static final String TAG = "FragmentTwo";
+    private static final String BUNDLE_KEY = "ExercisesList";
+
+
 
 
     private static RecyclerView mExercisesRecycler = null;
@@ -80,13 +82,55 @@ public class FragmentTwo extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.mExercisesRecycler = (RecyclerView) view.findViewById(R.id.exercises_recycler);
 
-        new AsynLoadExercises().execute();
-
         LinearLayoutManager lay_Manager = new LinearLayoutManager(getActivity());
         mExercisesRecycler.setLayoutManager(lay_Manager);
 
         mAdapter = new ExerciseAdapter(getActivity(), exerciseList);
         mExercisesRecycler.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(haveNetwork()){
+            Log.v(TAG, "Loading exercises");
+            loadItems();
+        }
+    }
+
+
+/*    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+            outState.putSerializable(BUNDLE_KEY, exerciseList);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null){
+            Log.v(TAG, "Loading exercises after Back");
+            mAdapter.load((ExerciseList) savedInstanceState.getSerializable(BUNDLE_KEY));
+        }
+    }*/
+
+    private boolean haveNetwork() {
+        boolean have_Wifi = false;
+        boolean have_MobileData = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+
+        for (NetworkInfo info : networkInfos) {
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    have_Wifi = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    have_MobileData = true;
+        }
+        return have_MobileData||have_Wifi;
     }
 
     @Override
@@ -118,7 +162,12 @@ public class FragmentTwo extends Fragment {
         return true;
     }
 
-    class AsynLoadExercises extends AsyncTask<Void, Void, ExerciseList>{
+    private void loadItems() {
+        new AsyncLoadExercises().execute();
+    }
+
+
+    class AsyncLoadExercises extends AsyncTask<Void, Void, ExerciseList> {
 
         @Override
         protected ExerciseList doInBackground(Void... voids) {
@@ -127,9 +176,9 @@ public class FragmentTwo extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(ExerciseList items){
+        protected void onPostExecute(ExerciseList items) {
             super.onPostExecute(items);
-            exerciseList = items;
+            mAdapter.load(items);
         }
     }
 }
