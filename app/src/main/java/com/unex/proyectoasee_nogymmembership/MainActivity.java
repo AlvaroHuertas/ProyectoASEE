@@ -1,25 +1,13 @@
 package com.unex.proyectoasee_nogymmembership;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.app.SearchManager;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.unex.proyectoasee_nogymmembership.AppBarUtils.SettingsFragment;
-import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
 
 public class MainActivity extends AppCompatActivity
         {

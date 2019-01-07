@@ -87,7 +87,6 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
         });
 
         viewHolder.cardView.setOnLongClickListener(new View.OnLongClickListener(){
-
             @Override
             public boolean onLongClick(View v) {
                 onLongClickListener.onLongItemClickListener(exerciseList.getElements().get(i));

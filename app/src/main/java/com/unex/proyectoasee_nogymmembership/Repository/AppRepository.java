@@ -79,7 +79,6 @@ public class AppRepository {
      */
     public List<Routine> getAllRoutines() {
         List<Routine> items = appDB.routineDAO().getAll();
-
         return items;
     }
 
@@ -135,5 +134,20 @@ public class AppRepository {
      */
     public void deleteExercise(Exercise exercise) {
         appDB.exerciseDAO().deleteExercises(exercise);
+    }
+
+    /**
+     * GET an exercise that its already added to a certain routine
+     * @param id_ex Id of the exercise
+     * @param id_rou Id of the routine
+     * @return Exercise we are looking for
+     */
+    public Exercise getExerciseInRoutine(int id_ex, int id_rou) {
+        Exercise exercise=appDB.exerciseDAO().getExercise((int)id_ex,(int)id_rou);
+        return exercise;
+    }
+
+    public void addExercise(Exercise exerciseToInsert) {
+        appDB.exerciseDAO().insert(exerciseToInsert);
     }
 }

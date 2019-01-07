@@ -89,8 +89,8 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
     class AsyncLoad extends AsyncTask<Void, Void, List<Routine>> {
         @Override
         protected List<Routine> doInBackground(Void... voids) {
-            AppDataBase appDB = AppDataBase.getDataBase(AddExerciseToRoutine.this);
-            List<Routine> items = appDB.routineDAO().getAll();
+            AppRepository r = AppRepository.getInstance(AddExerciseToRoutine.this);
+            List<Routine> items = r.getAllRoutines();
             return items;
         }
 
@@ -106,18 +106,13 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
     class AsyncAddRoutine extends AsyncTask<Void, Void, Exercise> {
         @Override
         protected Exercise doInBackground(Void... voids) {
+            AppRepository r = AppRepository.getInstance(AddExerciseToRoutine.this);
+            Exercise exercise = r.getExerciseInRoutine((int)id_ex,(int)id_rou);
 
-            AppDataBase appDB = AppDataBase.getDataBase(AddExerciseToRoutine.this);
-            Exercise exercise=appDB.exerciseDAO().getExercise((int)id_ex,(int)id_rou);
-
-            // Check exercise is not added
+            // Checks if exercise is not added
             if(exercise==null){
                 Exercise exerciseToInsert=new Exercise(id_ex,name,description,id_rou);
-
-                Log.v(TAG, "Routine added");
-                Log.v(TAG, String.valueOf(id_rou));
-
-                appDB.exerciseDAO().insert(exerciseToInsert);
+                r.addExercise(exerciseToInsert);
 
                 runOnUiThread(new Runnable() {
                     public void run() {
