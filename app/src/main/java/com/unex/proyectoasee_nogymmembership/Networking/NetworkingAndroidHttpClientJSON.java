@@ -114,7 +114,6 @@ public class NetworkingAndroidHttpClientJSON {
 
                         exercisesList.add(exerciseObj);
                     }
-                 this.exerciseList.setElements(exercisesList);
                 }
 
             } catch (JSONException e) {

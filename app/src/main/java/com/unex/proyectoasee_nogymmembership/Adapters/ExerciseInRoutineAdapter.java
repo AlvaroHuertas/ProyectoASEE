@@ -3,6 +3,7 @@ package com.unex.proyectoasee_nogymmembership.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.unex.proyectoasee_nogymmembership.Adds.ExerciseDescActivity;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
@@ -73,6 +75,17 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
     public void onBindViewHolder(ViewHolder viewHolder,final int i) {
 
         viewHolder.name.setText(exerciseList.getElements().get(i).getName());
+        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ExerciseDescActivity.class);
+                intent.putExtra("name_exercise",exerciseList.getElements().get(i).getName());
+                intent.putExtra("description_exercise",exerciseList.getElements().get(i).getDescription());
+                context.startActivity(intent);
+
+            }
+        });
+
         viewHolder.cardView.setOnLongClickListener(new View.OnLongClickListener(){
 
             @Override

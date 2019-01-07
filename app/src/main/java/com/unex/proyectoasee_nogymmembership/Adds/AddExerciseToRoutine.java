@@ -42,6 +42,9 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        id_ex=intent.getIntExtra("id_exercise",-1);
+
         setContentView(R.layout.activity_add_ex_to_routine);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,8 +56,7 @@ public class AddExerciseToRoutine extends AppCompatActivity implements RoutineLi
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
-        id_ex=intent.getIntExtra("id_exercise",-1);
+
         name=intent.getStringExtra("name_exercise");
         description=intent.getStringExtra("description_exercise");
 

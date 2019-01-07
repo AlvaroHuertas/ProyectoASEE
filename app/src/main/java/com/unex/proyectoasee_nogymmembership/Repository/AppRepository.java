@@ -68,8 +68,8 @@ public class AppRepository {
      * @param id Id of the exercise
      * @return The exercise
      */
-    public Exercise getExercise(int id){
-        Exercise e = appDB.exerciseDAO().getExercise(id);
+    public Exercise getExercise(int id,int rid){
+        Exercise e = appDB.exerciseDAO().getExercise(id,rid);
         return e;
     }
 
