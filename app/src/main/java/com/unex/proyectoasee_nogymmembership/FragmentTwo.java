@@ -1,6 +1,8 @@
 package com.unex.proyectoasee_nogymmembership;
 
 
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -64,7 +66,7 @@ public class FragmentTwo extends Fragment {
 
     public ExerciseAdapter mAdapter;
     public ExerciseList exerciseList;
-    private FragmentTwoViewModel mViewModel;
+    public FragmentTwoViewModel mViewModel;
 
 
     public FragmentTwo() {
@@ -93,17 +95,26 @@ public class FragmentTwo extends Fragment {
         mExercisesRecycler.setLayoutManager(lay_Manager);
 
         mAdapter = new ExerciseAdapter(getActivity(), exerciseList);
-        mExercisesRecycler.setAdapter(mAdapter);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        mViewModel.getExerciseList().observe((LifecycleOwner) this,exList -> {
+            // If the exerciseList forecast details change, update the UI
+            if (exList != null){
+                if(exList.getElements().size()!=0) {
+                    updateIU(exList);
+                }
+            }
+        });
 
         if(haveNetwork()){
             Log.v(TAG, "Loading exercises");
             loadItems();
         }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
 
@@ -121,6 +132,11 @@ public class FragmentTwo extends Fragment {
             mAdapter.load((ExerciseList) savedInstanceState.getSerializable(BUNDLE_KEY));
         }
     }*/
+
+    public void updateIU(ExerciseList items){
+        mAdapter.load(items);
+        mExercisesRecycler.setAdapter(mAdapter);
+    }
 
     private boolean haveNetwork() {
         boolean have_Wifi = false;
@@ -185,7 +201,9 @@ public class FragmentTwo extends Fragment {
         @Override
         protected void onPostExecute(ExerciseList items) {
             super.onPostExecute(items);
-            mAdapter.load(items);
+            mViewModel.setExerciseList(items);
+            //updateIU(items);
+
         }
     }
 }

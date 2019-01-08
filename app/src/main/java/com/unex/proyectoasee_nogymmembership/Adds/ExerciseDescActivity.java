@@ -37,7 +37,7 @@ public class ExerciseDescActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id=intent.getIntExtra("id_exercise",-1);
 
-        mViewModel = ViewModelProviders.of(this).get(ExerciseDescActivityViewModel.class);
+        //mViewModel = ViewModelProviders.of(this).get(ExerciseDescActivityViewModel.class);
 
         if(id!=-1) {
             setContentView(R.layout.exercise_desc);

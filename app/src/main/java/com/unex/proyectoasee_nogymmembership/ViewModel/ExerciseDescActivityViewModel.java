@@ -1,21 +1,23 @@
 package com.unex.proyectoasee_nogymmembership.ViewModel;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 
 public class ExerciseDescActivityViewModel extends ViewModel {
 
-    private Exercise exercise;
+    private MutableLiveData<Exercise> exercise;
 
     public ExerciseDescActivityViewModel() {
+        exercise=new MutableLiveData<>();
     }
 
-    public Exercise getExercise() {
+    public MutableLiveData<Exercise> getExercise() {
         return this.exercise;
     }
 
     public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
+        this.exercise.postValue(exercise);
     }
 }
