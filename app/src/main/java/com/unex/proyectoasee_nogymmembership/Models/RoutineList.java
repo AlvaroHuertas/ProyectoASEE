@@ -7,51 +7,81 @@ public class RoutineList {
 
     protected List<Routine> elements;
 
-    public RoutineList(){
+    public RoutineList() {
         elements = new ArrayList<>();
     }
 
-    public RoutineList(List<Routine> e){
+    public RoutineList(List<Routine> e) {
         elements = e;
     }
 
-
-    public void clear(){
+    /**
+     * Removes all the elements from the list
+     */
+    public void clear() {
         elements.clear();
     }
 
-    public void addItem(Routine item){
+    /**
+     * Adds one element to the list
+     *
+     * @param item Element to be added
+     */
+    public void addItem(Routine item) {
         elements.add(item);
     }
 
-    public void deleteItem(Routine routine){
+    /**
+     * Removes a element from the list
+     *
+     * @param routine Item to be removed
+     */
+    public void deleteItem(Routine routine) {
         elements.remove(routine);
     }
 
-    public void deleteAllItems(){
-        elements.clear();
-    }
-
-    public void updateItem(int position, Routine item){
-        elements.get(position).setStatus(item.getStatus());
-    }
-
+    /**
+     * Getter of the elements attribute
+     *
+     * @return List with all the elements
+     */
     public List<Routine> getElements() {
         return elements;
     }
 
+    /**
+     * Setter of the elements attribute
+     *
+     * @param elements List of elements
+     */
     public void setElements(List<Routine> elements) {
         this.elements = elements;
     }
 
-    public Routine get(int position){
+    /**
+     * Gets a element from the list
+     *
+     * @param position Position of the element
+     * @return Element
+     */
+    public Routine get(int position) {
         return elements.get(position);
     }
 
-    public int size(){
+    /**
+     * Calculates the size of the list
+     *
+     * @return Size of the list
+     */
+    public int size() {
         return elements.size();
     }
 
+    /**
+     * Add all the elements to the list
+     *
+     * @param r List of elements to be added
+     */
     public void addAll(List<Routine> r) {
         elements.addAll(r);
     }

@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,26 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
-import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
-import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
-import com.unex.proyectoasee_nogymmembership.Networking.NetworkUtils;
-import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSON;
 import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
 import com.unex.proyectoasee_nogymmembership.ViewModel.FragmentTwoViewModel;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,8 +41,6 @@ public class FragmentTwo extends Fragment {
     //Definición de clases JSON
     private static final String TAG = "FragmentTwo";
     private static final String BUNDLE_KEY = "ExercisesList";
-
-
 
 
     private static RecyclerView mExercisesRecycler = null;
@@ -86,7 +69,6 @@ public class FragmentTwo extends Fragment {
 
         mViewModel = ViewModelProviders.of(getActivity()).get(FragmentTwoViewModel.class);
 
-
         this.mExercisesRecycler = (RecyclerView) view.findViewById(R.id.exercises_recycler);
 
         LinearLayoutManager lay_Manager = new LinearLayoutManager(getActivity());
@@ -100,7 +82,7 @@ public class FragmentTwo extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if(haveNetwork()){
+        if (haveNetwork()) {
             Log.v(TAG, "Loading exercises");
             loadItems();
         }
@@ -121,24 +103,6 @@ public class FragmentTwo extends Fragment {
             mAdapter.load((ExerciseList) savedInstanceState.getSerializable(BUNDLE_KEY));
         }
     }*/
-
-    private boolean haveNetwork() {
-        boolean have_Wifi = false;
-        boolean have_MobileData = false;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
-
-        for (NetworkInfo info : networkInfos) {
-            if (info.getTypeName().equalsIgnoreCase("WIFI"))
-                if (info.isConnected())
-                    have_Wifi = true;
-            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (info.isConnected())
-                    have_MobileData = true;
-        }
-        return have_MobileData||have_Wifi;
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -169,11 +133,40 @@ public class FragmentTwo extends Fragment {
         return true;
     }
 
+    /**
+     * Load all the exercises from the api
+     */
     private void loadItems() {
         new AsyncLoadExercises().execute();
     }
 
+    /**
+     * Checks if the device currently has network connection
+     *
+     * @return True if the device has internet connection
+     */
+    private boolean haveNetwork() {
+        boolean have_Wifi = false;
+        boolean have_MobileData = false;
 
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+
+        for (NetworkInfo info : networkInfos) {
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    have_Wifi = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    have_MobileData = true;
+        }
+        return have_MobileData || have_Wifi;
+    }
+
+
+    /**
+     * AsyncTask to load all the exercises from the api
+     */
     class AsyncLoadExercises extends AsyncTask<Void, Void, ExerciseList> {
 
         @Override
