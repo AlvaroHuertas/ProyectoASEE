@@ -1,12 +1,8 @@
 package com.unex.proyectoasee_nogymmembership.Adds;
 
-import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.unex.proyectoasee_nogymmembership.Adapters.RoutineListAdapter;
-import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
-import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
-import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.R;
 import com.unex.proyectoasee_nogymmembership.ViewModel.ExerciseDescActivityViewModel;
 

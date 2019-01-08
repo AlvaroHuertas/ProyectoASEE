@@ -21,53 +21,31 @@ import java.util.List;
 public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.ViewHolder>{
     private Context context;
     private RoutineList routineList;
+
+    /**
+     * Callback that defines the click function in one element of the data set
+     */
     CallBack callback;
-    private final OnItemClickListener listener;
 
-    public interface OnItemClickListener {
-        void onItemClick(Routine item);     //Type of the element to be returned
-    }
-
-    public RoutineListAdapter(Context context, RoutineList routineList) {
-        this.context = context;
-        this.routineList = routineList;
-        this.listener = null;
-    }
-
-    public RoutineListAdapter(OnItemClickListener listener) {
-        this.routineList = new RoutineList();
-        this.listener = listener;
-    }
-
-    public RoutineListAdapter(Context context,CallBack callback){
-        this.context = context;
-        this.listener = null;
-        this.callback=callback;
-        this.routineList=new RoutineList();
-    }
+    /**
+     * Defines the method it is going to be executed when click on an item.
+     */
     public interface CallBack{
         void onItemClicked(int position);
     }
 
-    public void load(RoutineList items) {
-        routineList.clear();
-        routineList = items;
-        notifyDataSetChanged();
+    public RoutineListAdapter(Context context,CallBack callback){
+        this.context = context;
+        this.callback=callback;
+        this.routineList=new RoutineList();
     }
 
-    public Routine getFromPosition(int position) {
-        return routineList.get(position);
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        CardView cardView;
-        TextView name;
-        public ViewHolder(@NonNull View itemView) {
-
-            super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.routineCardView);
-            name=(TextView) itemView.findViewById(R.id.routine_name);
-        }
+    @NonNull
+    @Override
+    public RoutineListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_routine_name,viewGroup,false);
+        ViewHolder viewHolder=new ViewHolder(itemView);
+        return viewHolder;
     }
 
     @Override
@@ -85,6 +63,26 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
 
     }
 
+    /**
+     * Loads all the routines in the data set of the adapter
+     *
+     * @param items List of routines we are managing in the application
+     */
+    public void load(RoutineList items) {
+        routineList.clear();
+        routineList = items;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * GET an item in a certain position
+     * @param position Position of the item
+     * @return The item we are looking for
+     */
+    public Routine getFromPosition(int position) {
+        return routineList.get(position);
+    }
+
     @Override
     public int getItemCount() {
         List<Routine> exercisesAux = new ArrayList<>();
@@ -97,12 +95,15 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
         return 0;
     }
 
-    @NonNull
-    @Override
-    public RoutineListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_routine_name,viewGroup,false);
-        ViewHolder viewHolder=new ViewHolder(itemView);
-        return viewHolder;
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        CardView cardView;
+        TextView name;
+        public ViewHolder(@NonNull View itemView) {
+
+            super(itemView);
+            cardView = (CardView) itemView.findViewById(R.id.routineCardView);
+            name=(TextView) itemView.findViewById(R.id.routine_name);
+        }
     }
 
 }

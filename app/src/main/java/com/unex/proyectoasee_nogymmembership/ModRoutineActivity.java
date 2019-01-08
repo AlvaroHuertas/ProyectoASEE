@@ -2,11 +2,9 @@ package com.unex.proyectoasee_nogymmembership;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,8 +13,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
-import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
-import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 public class ModRoutineActivity extends Activity {
 

@@ -3,13 +3,12 @@ package com.unex.proyectoasee_nogymmembership.Models;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "exercise", primaryKeys = {"exerciseId","routineId"},foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "routineId", onDelete = CASCADE))
+@Entity(tableName = "exercise", primaryKeys = {"exerciseId", "routineId"}, foreignKeys = @ForeignKey(entity = Routine.class, parentColumns = "id", childColumns = "routineId", onDelete = CASCADE))
 public class Exercise implements Serializable {
 
     public long exerciseId;
@@ -59,45 +58,94 @@ public class Exercise implements Serializable {
         this.routineId = routineId;
     }
 
+    /**
+     * Getter of exerciseID attribute
+     *
+     * @return exerciseId of the Exercise
+     */
     public long getExerciseId() {
         return exerciseId;
     }
 
+    /**
+     * Setter of exerciseId attribute
+     *
+     * @param exerciseId New value of the attribute
+     */
     public void setExerciseId(long exerciseId) {
         this.exerciseId = exerciseId;
     }
 
+    /**
+     * Getter of name attribute
+     *
+     * @return name of the Exercise
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Setter of name attribute
+     *
+     * @param name New value of the attribute
+     */
     public void setName(String name) {
         this.name = name;
     }
 
-
+    /**
+     * Getter of description attribute
+     *
+     * @return description of the Exercise
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Setter of description attribute
+     *
+     * @param description New value of the attribute
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Getter of muscles attribute
+     *
+     * @return muscles of the Exercise
+     */
     public String getMuscles() {
         return muscles;
     }
 
+    /**
+     * Setter of muscles attribute
+     *
+     * @param muscles New value of the attribute
+     */
+    public void setMuscles(String muscles) {
+        this.muscles = muscles;
+    }
+
+    /**
+     * Getter of routineId attribute
+     *
+     * @return routineId of the Exercise
+     */
     public long getRoutineId() {
         return routineId;
     }
 
+    /**
+     * Setter of routineId attribute
+     *
+     * @param routineId New value of the attribute
+     */
     public void setRoutineId(long routineId) {
         this.routineId = routineId;
     }
 
-
-    public String getText1() {
-        return this.name;
-    }
 }

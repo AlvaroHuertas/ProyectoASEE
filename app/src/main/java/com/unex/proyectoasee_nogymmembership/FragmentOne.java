@@ -12,24 +12,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
-import android.support.v7.widget.SearchView;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.RoutineAdapter;
 import com.unex.proyectoasee_nogymmembership.Adds.AddRoutineActivity;
 import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
-import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Routine;
 import com.unex.proyectoasee_nogymmembership.Models.RoutineList;
 import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
-import com.unex.proyectoasee_nogymmembership.RoomDB.AppDataBase;
 
 import java.util.List;
 
@@ -39,8 +35,6 @@ import java.util.List;
  */
 public class FragmentOne extends Fragment {
 
-
-    // Add a Routine Request Code
     private static final int ADD_ROUTINE_ITEM_REQUEST = 0;
     public static final int RESULT_OK = -1;
 
@@ -52,9 +46,14 @@ public class FragmentOne extends Fragment {
         // Required empty public constructor
     }
 
-    private AlertDialog AskOption(final Routine routine)
-    {
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getContext())
+    /**
+     * Create an AlertDialog to ask if we want to delete a routine or not
+     *
+     * @param routine Routine we are going to delete
+     * @return Dialog
+     */
+    private AlertDialog AskOption(final Routine routine) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
                 //set message, title, and icon
                 .setTitle("Delete")
                 .setMessage("Do you want to Delete")
@@ -68,7 +67,6 @@ public class FragmentOne extends Fragment {
                     }
 
                 })
-
 
 
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -191,17 +189,27 @@ public class FragmentOne extends Fragment {
         super.onDestroy();
     }
 
+    /**
+     * Deletes a routine in the adapter as well as in the database
+     *
+     * @param routine Routine to be removed
+     */
     public void delete(Routine routine) {
         mAdapter.deleteItem(routine);
         new AsyncDeleteRoutine().execute(routine);
     }
 
 
-    // Load stored Routines
+    /**
+     * Load all the routines from the database
+     */
     private void loadItems() {
         new AsyncLoad().execute();
     }
 
+    /**
+     * AsyncTask to load all the routines from the database
+     */
     class AsyncLoad extends AsyncTask<Void, Void, List<Routine>> {
         @Override
         protected List<Routine> doInBackground(Void... voids) {
@@ -219,6 +227,9 @@ public class FragmentOne extends Fragment {
 
     }
 
+    /**
+     * AsyncTask to insert a routine in the database and update the status of the adapter
+     */
     class AsyncInsert extends AsyncTask<Routine, Void, Routine> {
 
         @Override
@@ -237,6 +248,9 @@ public class FragmentOne extends Fragment {
     }
 
 
+    /**
+     * Asynctask to delete a routine from the database
+     */
     class AsyncDeleteRoutine extends AsyncTask<Routine, Void, Void> {
 
         @Override

@@ -20,13 +20,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Asignar el layout que contiene ambas pantallas
         TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
 
-        //Asignar el layout que contiene el ViewPager
         ViewPager pager=(ViewPager)findViewById(R.id.viewpager);
 
-        //Creación del adaptador
         tabpagerAdapter tabPagerAdapter = new tabpagerAdapter(getSupportFragmentManager());
         //Pasar el adapter al pager para la creacion de los fragments
         pager.setAdapter(tabPagerAdapter);

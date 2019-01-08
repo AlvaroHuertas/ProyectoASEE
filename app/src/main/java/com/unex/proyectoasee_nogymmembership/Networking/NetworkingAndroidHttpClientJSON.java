@@ -72,7 +72,7 @@ public class NetworkingAndroidHttpClientJSON {
                     new String[]{JSON_SEG, JSON_SEG2, JSON_SEG_IMG});
             result[1] = NetworkUtils.getJSONResponse(queryURL);
 
-            if(result != null)
+            if (result != null)
                 return jsonToList(result);
 
             return null;
@@ -84,6 +84,12 @@ public class NetworkingAndroidHttpClientJSON {
             exerciseList.addAll(items);
         }
 
+        /**
+         * It translates a list of JSONs into a list of exercises
+         *
+         * @param responseObject List of JSONs
+         * @return List of exercises
+         */
         public List<Exercise> jsonToList(JSONObject[] responseObject) {
             List<Exercise> exercisesList = new ArrayList<>();
             try {
@@ -95,7 +101,7 @@ public class NetworkingAndroidHttpClientJSON {
                         // Get single exercise data - a Map
                         JSONObject exercise = (JSONObject) exercises.get(idx);
                         // Delete HTML tags from description
-                        String description=Jsoup.parse(exercise.get(DESCRIPTION_TAG).toString()).text();
+                        String description = Jsoup.parse(exercise.get(DESCRIPTION_TAG).toString()).text();
                         // Build exercise object
                         Exercise exerciseObj = new Exercise(idx, exercise.get(NAME_TAG).toString(), description, "");
 

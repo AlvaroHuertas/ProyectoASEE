@@ -4,13 +4,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.R;
 
@@ -41,6 +39,9 @@ public class UserPreferences extends AppCompatActivity {
 
     }
 
+    /**
+     * Save all the preferences inserted by the user. It saves the preferences in SharedPreferences
+     */
     public void setPreferences() {
         int radioId;
         EditText weight, height;
