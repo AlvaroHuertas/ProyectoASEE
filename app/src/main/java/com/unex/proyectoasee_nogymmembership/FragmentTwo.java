@@ -1,6 +1,7 @@
 package com.unex.proyectoasee_nogymmembership;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -32,6 +33,7 @@ import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkUtils;
 import com.unex.proyectoasee_nogymmembership.Networking.NetworkingAndroidHttpClientJSON;
 import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
+import com.unex.proyectoasee_nogymmembership.ViewModel.FragmentTwoViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +64,7 @@ public class FragmentTwo extends Fragment {
 
     public ExerciseAdapter mAdapter;
     public ExerciseList exerciseList;
+    private FragmentTwoViewModel mViewModel;
 
 
     public FragmentTwo() {
@@ -80,6 +83,10 @@ public class FragmentTwo extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mViewModel = ViewModelProviders.of(getActivity()).get(FragmentTwoViewModel.class);
+
+
         this.mExercisesRecycler = (RecyclerView) view.findViewById(R.id.exercises_recycler);
 
         LinearLayoutManager lay_Manager = new LinearLayoutManager(getActivity());

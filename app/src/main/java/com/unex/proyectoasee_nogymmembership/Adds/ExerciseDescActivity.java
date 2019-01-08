@@ -1,10 +1,14 @@
 package com.unex.proyectoasee_nogymmembership.Adds;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,11 +20,15 @@ import com.unex.proyectoasee_nogymmembership.DBUtils.ExerciseCRUD;
 import com.unex.proyectoasee_nogymmembership.DBUtils.RoutineCRUD;
 import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.R;
+import com.unex.proyectoasee_nogymmembership.ViewModel.ExerciseDescActivityViewModel;
 
-public class ExerciseDescActivity extends AppCompatActivity{
+public class ExerciseDescActivity extends AppCompatActivity {
     private int id;
     private String name;
     private String description;
+    private AppCompatDelegate mDelegate;
+    private ExerciseDescActivityViewModel mViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +36,9 @@ public class ExerciseDescActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         id=intent.getIntExtra("id_exercise",-1);
+
+        mViewModel = ViewModelProviders.of(this).get(ExerciseDescActivityViewModel.class);
+
         if(id!=-1) {
             setContentView(R.layout.exercise_desc);
         }else{
@@ -77,6 +88,5 @@ public class ExerciseDescActivity extends AppCompatActivity{
             }
         }
     };
-
 
 }
