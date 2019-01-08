@@ -162,6 +162,11 @@ public class AppRepository {
         return exercise;
     }
 
+    /**
+     * Add a new exercise to the database
+     *
+     * @param exerciseToInsert Item we are going to add
+     */
     public void addExercise(Exercise exerciseToInsert) {
         appDB.exerciseDAO().insert(exerciseToInsert);
     }

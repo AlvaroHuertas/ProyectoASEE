@@ -68,4 +68,12 @@ public class ExerciseList implements Serializable {
         elements.remove(e);
     }
 
+    /**
+     * GET an exercise from a certain position
+     * @param i Position
+     * @return The exercise
+     */
+    public Exercise getExercise(int i) {
+        return elements.get(i);
+    }
 }

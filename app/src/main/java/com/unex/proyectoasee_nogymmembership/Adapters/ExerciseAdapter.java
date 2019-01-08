@@ -51,20 +51,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ExerciseAdapter.ViewHolder viewHolder, final int i) {
-        List<Exercise> exercisesAux = new ArrayList<>();
-        exercisesAux=exerciseList.getElements();
-        viewHolder.name.setText(exercisesAux.get(i).getName());
-        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ExerciseDescActivity.class);
-                intent.putExtra("id_exercise",i+1);
-                intent.putExtra("name_exercise",exerciseList.getElements().get(i).getName());
-                intent.putExtra("description_exercise",exerciseList.getElements().get(i).getDescription());
-                context.startActivity(intent);
-
-            }
-        });
+       viewHolder.bind(exerciseList.getExercise(i), i);
     }
 
     /**
@@ -129,14 +116,27 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     };
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        CardView cardView;
-        TextView name,description;
+        TextView name;
 
         public ViewHolder(View item){
             super(item);
-            cardView = (CardView) item.findViewById(R.id.cardView);
             name = (TextView) item.findViewById(R.id.exercise_name);
+        }
 
+        /**
+         * Binds all the content into the ViewHolder
+         * @param exercise Exercise to bind
+         * @param position Position of the exercise
+         */
+        public void bind(Exercise exercise, int position) {
+            name.setText(exercise.getName());
+            itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(context, ExerciseDescActivity.class);
+                intent.putExtra("id_exercise",position+1);
+                intent.putExtra("name_exercise",exercise.getName());
+                intent.putExtra("description_exercise",exercise.getDescription());
+                context.startActivity(intent);
+            });
 
         }
     }

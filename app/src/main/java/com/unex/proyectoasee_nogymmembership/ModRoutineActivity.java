@@ -53,30 +53,22 @@ public class ModRoutineActivity extends Activity {
         getWindow().setElevation(10);
 
         final Button discardButton = (Button) findViewById(R.id.discardButton_mod);
-        discardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        discardButton.setOnClickListener(v -> finish());
 
         final Button submitButton = (Button) findViewById(R.id.submitButton_mod);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        submitButton.setOnClickListener(v -> {
 
-                String nameRoutine = (String) name.getText().toString();
-                String typeRoutine = (String) type.getSelectedItem();
+            String nameRoutine = (String) name.getText().toString();
+            String typeRoutine = (String) type.getSelectedItem();
 
-                routineItem.setName(nameRoutine);
-                routineItem.setType(typeRoutine);
+            routineItem.setName(nameRoutine);
+            routineItem.setType(typeRoutine);
 
-                Intent data = new Intent();
-                data.putExtra("Routine", routineItem);
+            Intent data = new Intent();
+            data.putExtra("Routine", routineItem);
 
-                setResult(RESULT_OK, data);
-                finish();
-            }
+            setResult(RESULT_OK, data);
+            finish();
         });
      }
 

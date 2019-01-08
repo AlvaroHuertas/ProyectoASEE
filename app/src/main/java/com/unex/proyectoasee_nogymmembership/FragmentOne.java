@@ -46,41 +46,6 @@ public class FragmentOne extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Create an AlertDialog to ask if we want to delete a routine or not
-     *
-     * @param routine Routine we are going to delete
-     * @return Dialog
-     */
-    private AlertDialog AskOption(final Routine routine) {
-        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
-                //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete")
-                .setIcon(R.drawable.ic_delete_name)
-
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        delete(routine);
-                        dialog.dismiss();
-                    }
-
-                })
-
-
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                })
-                .create();
-        return myQuittingDialogBox;
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -109,19 +74,13 @@ public class FragmentOne extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RoutineAdapter(getContext(), new RoutineAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Routine item) {
-                Intent intent = new Intent(getContext(), ShowRoutine.class);
-                intent.putExtra("Routine", item);
-                startActivity(intent);
-            }
-        }, new RoutineAdapter.OnItemLongClickListener() {
-            @Override
-            public void onLongItemClickListener(Routine item) {
-                AlertDialog diaBox = AskOption(item);
-                diaBox.show();
-            }
+        mAdapter = new RoutineAdapter(getContext(), item -> {
+            Intent intent = new Intent(getContext(), ShowRoutine.class);
+            intent.putExtra("Routine", item);
+            startActivity(intent);
+        }, item -> {
+            AlertDialog diaBox = AskOption(item);
+            diaBox.show();
         });
 
         mRecyclerView.setAdapter(mAdapter);
@@ -175,20 +134,6 @@ public class FragmentOne extends Fragment {
         loadItems();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        // ALTERNATIVE: Save all ToDoItems
-
-    }
-
-    @Override
-    public void onDestroy() {
-
-        super.onDestroy();
-    }
-
     /**
      * Deletes a routine in the adapter as well as in the database
      *
@@ -197,6 +142,34 @@ public class FragmentOne extends Fragment {
     public void delete(Routine routine) {
         mAdapter.deleteItem(routine);
         new AsyncDeleteRoutine().execute(routine);
+    }
+
+    /**
+     * Create an AlertDialog to ask if we want to delete a routine or not
+     *
+     * @param routine Routine we are going to delete
+     * @return Dialog
+     */
+    private AlertDialog AskOption(final Routine routine) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_name)
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        delete(routine);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
     }
 
 

@@ -167,19 +167,20 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
         private TextView type;
         private CheckBox status;
 
-        private Context mContext;
-
         public ViewHolder(Context context, View itemView) {
             super(itemView);
 
-            mContext = context;
-
-            //Cogemos las referencias a cada uno de los objetos de la vista
             name = (TextView) itemView.findViewById(R.id.nameView);
             type = (TextView) itemView.findViewById(R.id.typeView);
             status = (CheckBox) itemView.findViewById(R.id.statusCheckBox);
         }
 
+        /**
+         * Binds all the content into the ViewHolder
+         * @param routine Element to bind
+         * @param listener OnClickListener for the item
+         * @param longListener OnLongClickListener for the item
+         */
         public void bind(final Routine routine, final OnItemClickListener listener, final OnItemLongClickListener longListener) {
 
             name.setText(routine.getName());
@@ -188,38 +189,26 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
 
             status.setChecked(routine.getStatus() == Routine.Status.DONE);
 
-            status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        routine.setStatus(Routine.Status.DONE);
+            status.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    routine.setStatus(Routine.Status.DONE);
 
-                        name.setBackgroundColor(Color.GREEN);
-                    } else {
-                        routine.setStatus(Routine.Status.NOTDONE);
+                    name.setBackgroundColor(Color.GREEN);
+                } else {
+                    routine.setStatus(Routine.Status.NOTDONE);
 
-                        name.setBackgroundColor(Color.WHITE);
-                    }
-
-                    new AsyncStatus().execute(routine);
+                    name.setBackgroundColor(Color.WHITE);
                 }
+
+                new AsyncStatus().execute(routine);
             });
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(v -> listener.onItemClick(routine));
 
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(routine);
-                }
-            });
-
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    longListener.onLongItemClickListener(routine);
-                    return true;
-                }
+            itemView.setOnLongClickListener(v -> {
+                longListener.onLongItemClickListener(routine);
+                return true;
             });
 
 

@@ -157,12 +157,9 @@ public class ShowRoutine extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ExerciseInRoutineAdapter(ShowRoutine.this, new ExerciseInRoutineAdapter.OnItemLongClickListener() {
-            @Override
-            public void onLongItemClickListener(Exercise item) {
-                AlertDialog diaBox = AskOption(item);
-                diaBox.show();
-            }
+        mAdapter = new ExerciseInRoutineAdapter(ShowRoutine.this, item -> {
+            AlertDialog diaBox = AskOption(item);
+            diaBox.show();
         });
 
         new AsyncLoad().execute();
