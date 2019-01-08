@@ -1,6 +1,7 @@
 package com.unex.proyectoasee_nogymmembership.Networking;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
@@ -27,6 +28,8 @@ public class NetworkingAndroidHttpClientJSON {
     private static final String IMAGE_TAG = "image";
     public ExerciseList exerciseList;
 
+    private static final String LOAD_LIST = "ExercisesList";
+
     public NetworkingAndroidHttpClientJSON() {
         exerciseList = new ExerciseList();
         new HttpGetTask().execute();
@@ -46,14 +49,7 @@ public class NetworkingAndroidHttpClientJSON {
         private static final String LANGUAGE_P = "language";
         private static final String EQUIPMENT_P = "equipment";
         private static final String IMAGE = "image";
-
-        private View rootView;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
+        private static final String TAG = "API";
 
         @Override
         protected List<Exercise> doInBackground(Void... params) {
@@ -72,16 +68,21 @@ public class NetworkingAndroidHttpClientJSON {
                     new String[]{JSON_SEG, JSON_SEG2, JSON_SEG_IMG});
             result[1] = NetworkUtils.getJSONResponse(queryURL);
 
-            if (result != null)
+            if (result != null) {
+                Log.v(LOAD_LIST, "Getting response from the API");
                 return jsonToList(result);
-
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(List<Exercise> items) {
             exerciseList = new ExerciseList();
+            Log.v(LOAD_LIST, "List of exercises recovered from the API");
             exerciseList.addAll(items);
+            for(Exercise e : items){
+                Log.v(LOAD_LIST, "API: " + e.getName());
+            }
         }
 
         /**

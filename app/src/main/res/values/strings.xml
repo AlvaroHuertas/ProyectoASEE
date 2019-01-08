@@ -52,4 +52,7 @@
     <string name="title_activity_add_exercise_to_routine">Choose a routine to add</string>
     <string name="routine_prompt">Choose a type</string>
     <string name="search_title">Search</string>
+    <string name="refreshButton">Refresh</string>
+    <string name="setsIndicator">Sets :</string>
+    <string name="repsIndicator">Reps :</string>
 </resources>

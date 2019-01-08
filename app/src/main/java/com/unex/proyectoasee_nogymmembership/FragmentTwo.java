@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,26 +24,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.unex.proyectoasee_nogymmembership.Adapters.ExerciseAdapter;
 import com.unex.proyectoasee_nogymmembership.AppBarUtils.UserPreferences;
+import com.unex.proyectoasee_nogymmembership.Models.Exercise;
 import com.unex.proyectoasee_nogymmembership.Models.ExerciseList;
 import com.unex.proyectoasee_nogymmembership.Repository.AppRepository;
 import com.unex.proyectoasee_nogymmembership.ViewModel.FragmentTwoViewModel;
+
+import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
+import static android.os.Process.THREAD_PRIORITY_MORE_FAVORABLE;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentTwo extends Fragment {
-
-    ListView listCategories;
-
     private static final int ADD_CATEGORY_REQUEST = 0;
     public static final int RESULT_OK = -1;
     //Definición de clases JSON
     private static final String TAG = "FragmentTwo";
-    private static final String BUNDLE_KEY = "ExercisesList";
+    private static final String LOAD_LIST = "ExercisesList";
 
 
     private static RecyclerView mExercisesRecycler = null;
@@ -53,7 +56,6 @@ public class FragmentTwo extends Fragment {
 
 
     public FragmentTwo() {
-        // Required empty public constructor
     }
 
     @Override
@@ -81,14 +83,15 @@ public class FragmentTwo extends Fragment {
         mViewModel.getExerciseList().observe((LifecycleOwner) this, exList -> {
             // If the exerciseList forecast details change, update the UI
             if (exList != null) {
-                if (exList.getElements().size() != 0) {
+               // if (exList.getElements().size() != 0) {
+                    Log.v(LOAD_LIST, "Observe exList");
                     updateIU(exList);
-                }
+               // }
             }
         });
 
         if (haveNetwork()) {
-            Log.v(TAG, "Loading exercises");
+            Log.v(TAG, "Internet connection");
             loadItems();
         }
     }
@@ -149,6 +152,7 @@ public class FragmentTwo extends Fragment {
      * Load all the exercises from the api
      */
     private void loadItems() {
+        Log.v(LOAD_LIST, "Executing loadItems");
         new AsyncLoadExercises().execute();
     }
 
@@ -157,8 +161,13 @@ public class FragmentTwo extends Fragment {
      * @param items Elements to be inserted in the data set of the adapter
      */
     public void updateIU(ExerciseList items) {
+        Log.v(LOAD_LIST, "Updating IU");
+        for (Exercise e : items.getElements()){
+            Log.v(LOAD_LIST, "UpdateData: " + e.getName());
+        }
         mAdapter.load(items);
         mExercisesRecycler.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -168,6 +177,7 @@ public class FragmentTwo extends Fragment {
 
         @Override
         protected ExerciseList doInBackground(Void... voids) {
+            Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND + THREAD_PRIORITY_MORE_FAVORABLE);
             AppRepository r = AppRepository.getInstance(getContext());
             return new ExerciseList(r.getExercisesFromApi());
         }
@@ -175,6 +185,12 @@ public class FragmentTwo extends Fragment {
         @Override
         protected void onPostExecute(ExerciseList items) {
             super.onPostExecute(items);
+
+            Log.v(TAG, "Exercise list");
+            for(Exercise e : items.getElements()){
+                Log.v(TAG, e.getName());
+            }
+
             mViewModel.setExerciseList(items);
         }
     }

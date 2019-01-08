@@ -8,15 +8,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:paddingLeft="10dp">
 
 
         <TextView
             android:id="@+id/exercise_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="50px"
+            android:paddingLeft="20dp"
+            android:text="Exercise"
+            android:textSize="25dp"
             android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/setsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10sp"
+                android:text="@string/setsIndicator"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/setsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/repsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20sp"
+                android:text="@string/repsIndicator"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/repsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textSize="18sp" />
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

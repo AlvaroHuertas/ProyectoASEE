@@ -15,6 +15,9 @@ public class Exercise implements Serializable {
     public String name;
     public String description;
     public long routineId;
+    public int sets;
+
+    public int reps;
 
 
     @Ignore
@@ -44,18 +47,14 @@ public class Exercise implements Serializable {
         // this.imageURI=imageuri;
     }
 
-    @Ignore
-    public Exercise(String name, String description, String muscles, String imageuri) {
-        this.name = name;
-        this.description = description;
-        this.muscles = muscles;
-    }
 
-    public Exercise(long exerciseId, String name, String description, long routineId) {
+    public Exercise(long exerciseId, String name, String description, long routineId, int sets, int reps) {
         this.exerciseId = exerciseId;
         this.name = name;
         this.description = description;
         this.routineId = routineId;
+        this.sets = sets;
+        this.reps = reps;
     }
 
     /**
@@ -146,6 +145,43 @@ public class Exercise implements Serializable {
      */
     public void setRoutineId(long routineId) {
         this.routineId = routineId;
+    }
+
+
+    /**
+     * Getter of sets attribute
+     *
+     * @return sets of the Exercise
+     */
+    public int getSets() {
+        return sets;
+    }
+
+    /**
+     * Setter of rets attribute
+     *
+     * @param sets New value of the attribute
+     */
+    public void setSets(int sets) {
+        this.sets = sets;
+    }
+
+    /**
+     * Getter of reps attribute
+     *
+     * @return reps of the Exercise
+     */
+    public int getReps() {
+        return reps;
+    }
+
+    /**
+     * Setter of reps attribute
+     *
+     * @param reps New value of the attribute
+     */
+    public void setReps(int reps) {
+        this.reps = reps;
     }
 
 }

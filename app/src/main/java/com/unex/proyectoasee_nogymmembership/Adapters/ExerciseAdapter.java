@@ -24,6 +24,8 @@ import java.util.List;
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> implements Filterable {
     private Context context;
 
+    private static final String LOAD_LIST = "ExercisesList";
+
     /**
      * List of exercises we use in order to show the elements of the recycler view
      */
@@ -44,7 +46,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     @NonNull
     @Override
     public ExerciseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_exercise,viewGroup,false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_exercise_single,viewGroup,false);
         ViewHolder viewHolder=new ViewHolder(itemView);
         return viewHolder;
     }
@@ -59,6 +61,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
      * @param items LIst of exercises we are managing in the application
      */
     public void load(ExerciseList items) {
+        Log.v(LOAD_LIST, "Loading data into adapter");
         exerciseList.clear();
         exerciseList = items;
         exerciseListFull = new ExerciseList();
@@ -132,7 +135,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
             name.setText(exercise.getName());
             itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ExerciseDescActivity.class);
-                intent.putExtra("id_exercise",position+1);
+                intent.putExtra("exercise", exercise);
                 intent.putExtra("name_exercise",exercise.getName());
                 intent.putExtra("description_exercise",exercise.getDescription());
                 context.startActivity(intent);

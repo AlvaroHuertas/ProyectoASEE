@@ -17,6 +17,7 @@ public class AppRepository {
     private static AppRepository instance;
 
     private static final String TAG = "AppRepository";
+    private static final String LOAD_LIST = "ExercisesList";
 
     /**
      * Instance of the database Room manager. It is going to manage all the local data
@@ -61,10 +62,11 @@ public class AppRepository {
         if (appApi.getExerciseList() != null) {
             exercises = appApi.getExerciseList().getElements();
 
-            Log.v(TAG, "Getting exercises from the API");
+            Log.v(LOAD_LIST, "Getting exercises from the API");
             for (Exercise e : exercises) {
-                Log.v(TAG, e.getName());
+                Log.v(LOAD_LIST, "Repository: " + e.getName());
             }
+
         }
         return exercises;
     }
@@ -171,4 +173,17 @@ public class AppRepository {
         appDB.exerciseDAO().insert(exerciseToInsert);
     }
 
+
+    /**
+     * Update attributes of a certain exercise
+     *
+     * @param exercise Exercise we are going to update
+     */
+    public void updateExercise(Exercise exercise) {
+        Log.v(TAG, "Updating exercise");
+        Log.v(TAG, String.valueOf(exercise.getExerciseId()));
+        Log.v(TAG, exercise.getName());
+        Log.v(TAG, String.valueOf(exercise.getRoutineId()));
+        appDB.exerciseDAO().updateExercise(exercise);
+    }
 }

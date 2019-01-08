@@ -57,12 +57,14 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
     public void onBindViewHolder(ViewHolder viewHolder, final int i) {
 
         viewHolder.name.setText(exerciseList.getElements().get(i).getName());
+        viewHolder.setsNumber.setText(Integer.toString(exerciseList.getExercise(i).getSets()));
+        viewHolder.repsNumber.setText(Integer.toString(exerciseList.getExercise(i).getReps()));
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ExerciseDescActivity.class);
-                intent.putExtra("name_exercise", exerciseList.getElements().get(i).getName());
-                intent.putExtra("description_exercise", exerciseList.getElements().get(i).getDescription());
+                intent.putExtra("exercise",exerciseList.getExercise(i));
+                intent.putExtra("fromRoutine", true);
                 context.startActivity(intent);
 
             }
@@ -115,14 +117,14 @@ public class ExerciseInRoutineAdapter extends RecyclerView.Adapter<ExerciseInRou
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
-        TextView name, description;
+        TextView name, setsNumber, repsNumber;
 
         public ViewHolder(View item) {
             super(item);
             cardView = (CardView) item.findViewById(R.id.cardView);
             name = (TextView) item.findViewById(R.id.exercise_name);
-
-
+            setsNumber = (TextView) item.findViewById(R.id.setsNumber);
+            repsNumber = (TextView) item.findViewById(R.id.repsNumber);
         }
     }
 

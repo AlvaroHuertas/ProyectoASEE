@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ public class AddExerciseToRoutine extends AppCompatActivity{
     private RoutineListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private long id_ex=-1;
+    private long id_ex;
     private String name;
     private String description;
     private long id_rou;
@@ -36,8 +37,9 @@ public class AddExerciseToRoutine extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        id_ex=intent.getIntExtra("id_exercise",-1);
-
+        Exercise e = (Exercise) intent.getSerializableExtra("exercise");
+        id_ex= e.getExerciseId();
+        
         setContentView(R.layout.activity_add_ex_to_routine);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,24 +107,20 @@ public class AddExerciseToRoutine extends AppCompatActivity{
 
             // Checks if exercise is not added
             if(exercise==null){
-                Exercise exerciseToInsert=new Exercise(id_ex,name,description,id_rou);
+                Exercise exerciseToInsert=new Exercise(id_ex,name,description,id_rou, 0, 0);
                 r.addExercise(exerciseToInsert);
 
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast toast1 = Toast.makeText(AddExerciseToRoutine.this, "Añadido a rutina ", Toast.LENGTH_SHORT);
-                        toast1.setGravity(Gravity.BOTTOM|Gravity.CENTER, 0, 0);
-                        toast1.show();
-                    }
+                runOnUiThread(() -> {
+                    Toast toast1 = Toast.makeText(AddExerciseToRoutine.this, "Añadido a rutina ", Toast.LENGTH_SHORT);
+                    toast1.setGravity(Gravity.BOTTOM|Gravity.CENTER, 0, 0);
+                    toast1.show();
                 });
 
             }else{
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast toast1 = Toast.makeText(AddExerciseToRoutine.this, "Ya se encuentra añadido a la rutina ", Toast.LENGTH_SHORT);
-                        toast1.setGravity(Gravity.BOTTOM|Gravity.CENTER, 0, 0);
-                        toast1.show();
-                    }
+                runOnUiThread(() -> {
+                    Toast toast1 = Toast.makeText(AddExerciseToRoutine.this, "Ya se encuentra añadido a la rutina ", Toast.LENGTH_SHORT);
+                    toast1.setGravity(Gravity.BOTTOM|Gravity.CENTER, 0, 0);
+                    toast1.show();
                 });
 
             }

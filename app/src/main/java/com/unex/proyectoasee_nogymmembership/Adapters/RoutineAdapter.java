@@ -192,12 +192,8 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
             status.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     routine.setStatus(Routine.Status.DONE);
-
-                    name.setBackgroundColor(Color.GREEN);
                 } else {
                     routine.setStatus(Routine.Status.NOTDONE);
-
-                    name.setBackgroundColor(Color.WHITE);
                 }
 
                 new AsyncStatus().execute(routine);
@@ -210,7 +206,6 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.ViewHold
                 longListener.onLongItemClickListener(routine);
                 return true;
             });
-
 
         }
 
